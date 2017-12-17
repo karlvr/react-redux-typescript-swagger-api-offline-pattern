@@ -1,8 +1,7 @@
-# React + Redux + OAuth2 + Swagger Codegen API Client + TypeScript pattern
+# React + Redux + TypeScript + OAuth2 + Swagger Codegen API Client + Offline pattern
 
-This is a pattern for using React with Redux to build an app using a Swagger Codegen API Client in TypeScript. This is based upon my [pattern
-for building React + Redux + Typescript](https://github.com/karlvr/react-redux-typescript-pattern). Please refer to
-that pattern first for an introduction to the approach.
+This is a pattern for using React with Redux to build an Offline app using a Swagger Codegen API Client in TypeScript. This is based upon my [pattern
+for building React + Redux + Typescript + OAuth2 + Swagger Codegen API Client](https://github.com/karlvr/react-redux-typescript-swagger-api-pattern). Please refer to that pattern first for an introduction to the approach.
 
 For the API example we use the [Swagger Petstore](http://petstore.swagger.io/) API, which includes a Swagger API definition that we use to generate the API client, using swagger-codegen](https://github.com/swagger-api/swagger-codegen).
 
@@ -26,10 +25,9 @@ of:
 
 ## Dependencies
 
-In addition to the base [React + Redux + Typescript pattern]((https://github.com/karlvr/react-redux-typescript-pattern)) we add
-the following dependencies:
+In addition to the base [React + Redux + Typescript + OAuth2 + Swagger Codegen API Client](https://github.com/karlvr/react-redux-typescript-swagger-api-pattern) we add the following dependencies:
 
-* [redux-saga](https://redux-saga.js.org) (powerful async processing)
+* [redux-offline](https://github.com/redux-offline/redux-offline) (a complete offline pattern and framework)
 
 ## Running
 
@@ -55,31 +53,17 @@ npm start
 
 ## Setup
 
-Start with the setup of the base [React + Redux + Typescript pattern]((https://github.com/karlvr/react-redux-typescript-pattern)) and then
+Start with the setup of the base [React + Redux + Typescript + OAuth2 + Swagger Codegen API Client](https://github.com/karlvr/react-redux-typescript-swagger-api-pattern) and then
 continue...
 
 Install more dependencies:
 
 ```
-npm install --save redux-saga
+npm install --save @redux-offline/redux-offline
 ```
+
+Note that as of this time redux-offline doesn't contain TypeScript types, but there is a [PR for TypeScript type definitions for redux-offline](https://github.com/redux-offline/redux-offline/pull/112), so we have simply included the type definitions from that PR in our project at `src/types/redux-offline.d.ts`.
 
 ### API
 
-This pattern uses the [Swagger Petstore](http://petstore.swagger.io/) example API to demonstrate using [swagger-codegen](https://github.com/swagger-api/swagger-codegen) to generate an API module.
-
-We generate the API client code using an npm script, configured in `package.json`. You can run it to regenerate the API client:
-
-```
-npm run swagger-codegen
-```
-
-Note that script runs swagger-codegen and then runs `npm install` in the resulting package, so it is ready to be used.
-
-We generate the code into the `gen/api` folder. Note that we also add `gen` to the ignore list in `tsconfig.json` so that TypeScript doesn't try to compile it as part of our code, as we will be instead be installing it as a node module.
-
-We then install this code into our project:
-
-```
-npm install --save gen/api
-```
+Refer to [React + Redux + Typescript + OAuth2 + Swagger Codegen API Client](https://github.com/karlvr/react-redux-typescript-swagger-api-pattern#api) for how the API client is generated.

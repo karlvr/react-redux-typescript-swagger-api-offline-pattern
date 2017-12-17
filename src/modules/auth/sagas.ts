@@ -9,7 +9,7 @@ import * as actions from './actions';
 import { authenticate, refresh } from './functions';
 import { LoginRequestPayload } from './actions';
 import { SagaIterator, delay } from 'redux-saga';
-import { RootStoreState } from '../index';
+import { RootStoreState, readyAction } from '../index';
 import { AccessToken } from './types';
 
 import { accessTokenSelector } from './selectors';
@@ -78,6 +78,12 @@ function* refreshToken(): SagaIterator {
 }
 
 export default function* saga(): SagaIterator {
+    /* Wait for the state to be ready, as we read the state in the loggedIn function.
+    The state isn't immediately ready, as we use react-persist to load persisted state,
+    which happens asynchronously.
+    */
+    yield take(readyAction);
+
     while (true) {
         let isLoggedIn = (yield call(loggedIn)) as boolean;
 
