@@ -9,8 +9,9 @@ import * as actions from './actions';
 import { authenticate, refresh } from './functions';
 import { LoginRequestPayload } from './actions';
 import { SagaIterator, delay } from 'redux-saga';
-import { RootStoreState, readyAction } from '../index';
+import { RootStoreState } from '../index';
 import { AccessToken } from './types';
+import { readyAction } from '../root/actions';
 
 import { accessTokenSelector } from './selectors';
 

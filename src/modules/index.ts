@@ -1,52 +1,23 @@
-import { createStore, combineReducers, compose, applyMiddleware, StoreEnhancer } from 'redux';
+import { createStore, compose, applyMiddleware, StoreEnhancer } from 'redux';
 import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction';
-import { actionCreatorFactory } from 'typescript-fsa';
 import createSagaMiddleware from 'redux-saga';
 import { offline } from '@redux-offline/redux-offline';
 import defaultOfflineConfig from '@redux-offline/redux-offline/lib/defaults';
 
 import rootSaga from './sagas';
-import * as auth from './auth/reducer';
-import * as petstore from './petstore/reducer';
 import { setConfig as setAuthConfig } from './auth/functions';
+import { readyAction } from './root/actions';
+import { StoreState as RootStoreState, reducer } from './root/reducer';
 
-/* Import reducers from our modules */
-import * as template from '../modules/template/reducer';
-// import * as another from '../modules/another/reducers';
+export type RootStoreState = RootStoreState;
 
 /* API handling */
 import { handleDiscard, handleEffect } from './api/offline';
 
 /**
- * The root store state. Include sub-states for all of the modules / ducks.
- * All of these should be annotated `readonly`, as should everything down
- * the tree of StoreState interfaces, and their contents.
- */
-export interface RootStoreState {
-    readonly template: template.StoreState;
-    readonly auth: auth.StoreState;
-    readonly petstore: petstore.StoreState;
-}
-
-/**
- * The root reducer, combines reducers for all of the modules / ducks.
- */
-const reducer = combineReducers<RootStoreState>({
-    template: template.reducer,
-    auth: auth.reducer,
-    petstore: petstore.reducer,
-});
-
-/**
  * Create the redux-saga middleware.
  */
 const sagaMiddleware = createSagaMiddleware();
-
-/** Action creator factory for root actions. */
-const actionCreator = actionCreatorFactory();
-
-/** Action dispatched when the app state is ready (has been rehydrated) */
-export const readyAction = actionCreator('READY');
 
 /**
  * Create the redux-offline configuration, based on the default configuration.
