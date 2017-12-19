@@ -3,7 +3,7 @@
 This is a pattern for using React with Redux to build an Offline app using a Swagger Codegen API Client in TypeScript. This is based upon my [pattern
 for building React + Redux + Typescript + OAuth2 + Swagger Codegen API Client](https://github.com/karlvr/react-redux-typescript-swagger-api-pattern). Please refer to that pattern first for an introduction to the approach.
 
-For the API example we use the [Swagger Petstore](http://petstore.swagger.io/) API, which includes a Swagger API definition that we use to generate the API client, using swagger-codegen](https://github.com/swagger-api/swagger-codegen).
+For the API example we use the [Swagger Petstore](http://petstore.swagger.io/) API, which includes a Swagger API definition that we use to generate the API client, using [swagger-codegen](https://github.com/swagger-api/swagger-codegen).
 
 We also include an OAuth 2 authentication example. Note that this is independent of the API example!
 
