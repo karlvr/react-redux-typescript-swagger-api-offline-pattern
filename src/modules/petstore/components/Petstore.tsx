@@ -29,11 +29,6 @@ export default class Example extends React.Component<Props & Actions, State> {
         this.props.onAddPet('test');
     }
 
-    componentDidMount() {
-        // TODO this is run before rehydrate
-        this.props.loadPets();
-    }
-
     render() {
         const { pets } = this.props;
 
