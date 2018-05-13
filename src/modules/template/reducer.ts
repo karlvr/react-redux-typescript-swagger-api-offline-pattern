@@ -1,7 +1,7 @@
-import { reducerWithInitialState } from 'typescript-fsa-reducers';
+import { reducerWithInitialState } from 'typescript-fsa-reducers'
 
 /* Import our module's actions */
-import * as actions from './actions';
+import * as actions from './actions'
 
 /**
  * Export the StoreState interface for this module. We always name this interface
@@ -10,7 +10,7 @@ import * as actions from './actions';
  * all of the properties down the tree.
  */
 export interface StoreState {
-	readonly name: string;
+	readonly name: string
 }
 
 /**
@@ -21,7 +21,7 @@ const INITIAL_STATE: StoreState = {
 	(improve your git diffs!).
 	 */
 	name: 'React + Redux + Typescript pattern',
-};
+}
 
 /**
  * Reducer function for this module.
@@ -33,6 +33,5 @@ export const reducer = reducerWithInitialState(INITIAL_STATE)
 	}))
 	/* Reducer function for examplePrimitiveAction that returns a new state using an explicit return. */
 	.case(actions.examplePrimitiveAction, (state, name) => {
-		return { ...state, name };
+		return { ...state, name }
 	})
-	;

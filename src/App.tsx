@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { Provider } from 'react-redux';
+import * as React from 'react'
+import { Provider } from 'react-redux'
 
-import { store } from './modules/index';
+import { store } from './modules/index'
 
-import './App.css';
-import Example from './modules/template/containers/Example';
-import Login from './modules/auth/containers/Login';
-import Petstore from './modules/petstore/containers/Petstore';
-import ReadyGate from './modules/offline/containers/ReadyGate';
+import './App.css'
+import Example from './modules/template/containers/Example'
+import Login from './modules/auth/containers/Login'
+import Petstore from './modules/petstore/containers/Petstore'
+import ReadyGate from './modules/offline/containers/ReadyGate'
 
-const logo = require('./logo.svg');
+const logo = require('./logo.svg')
 
 class Waiting extends React.Component {
 	render() {
@@ -17,7 +17,7 @@ class Waiting extends React.Component {
 			<div>
 				<p>Loading&hellip;</p>
 			</div>
-		);
+		)
 	}
 }
 
@@ -37,8 +37,8 @@ class App extends React.Component {
 					</div>
 				</ReadyGate>
 			</Provider>
-		);
+		)
 	}
 }
 
-export default App;
+export default App

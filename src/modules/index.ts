@@ -1,23 +1,23 @@
-import { createStore, compose, applyMiddleware, StoreEnhancer } from 'redux';
-import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction';
-import createSagaMiddleware from 'redux-saga';
-import { offline } from '@redux-offline/redux-offline';
-import defaultOfflineConfig from '@redux-offline/redux-offline/lib/defaults';
+import { createStore, compose, applyMiddleware, StoreEnhancer } from 'redux'
+import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction'
+import createSagaMiddleware from 'redux-saga'
+import { offline } from '@redux-offline/redux-offline'
+import defaultOfflineConfig from '@redux-offline/redux-offline/lib/defaults'
 
-import rootSaga from './sagas';
-import { setConfig as setAuthConfig } from './auth/functions';
-import { readyAction } from './root/actions';
-import { StoreState as RootStoreState, reducer } from './root/reducer';
+import rootSaga from './sagas'
+import { setConfig as setAuthConfig } from './auth/functions'
+import { readyAction } from './root/actions'
+import { StoreState as RootStoreState, reducer } from './root/reducer'
 
-export type RootStoreState = RootStoreState;
+export type RootStoreState = RootStoreState
 
 /* API handling */
-import { handleDiscard, handleEffect } from './api/offline';
+import { handleDiscard, handleEffect } from './api/offline'
 
 /**
  * Create the redux-saga middleware.
  */
-const sagaMiddleware = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware()
 
 /**
  * Create the redux-offline configuration, based on the default configuration.
@@ -30,7 +30,7 @@ const offlineConfig = {
 	 */
 	persistCallback: () => {
 		/* Let our app know that the application state has been rehydrated and is ready to be used. */
-		store.dispatch(readyAction());
+		store.dispatch(readyAction())
 	},
 
 	/**
@@ -43,7 +43,7 @@ const offlineConfig = {
 	 * of an error.
 	 */
 	discard: handleDiscard,
-};
+}
 
 /**
  * Enhancers for the store.
@@ -55,20 +55,20 @@ const enhancers = compose(
 	applyMiddleware(sagaMiddleware),
 	/* Include the devtools. Comment this out if you don't want to use the dev tools. */
 	devToolsEnhancer({}),
-) as StoreEnhancer<RootStoreState>;
+) as StoreEnhancer<RootStoreState>
 
 /**
  * Create the store. We do not include an initial state, as each of the module / duck
  * reducers includes its own initial state.
  */
-export const store = createStore<RootStoreState>(reducer, enhancers);
+export const store = createStore<RootStoreState>(reducer, enhancers)
 
 /* Run the root saga */
-sagaMiddleware.run(rootSaga);
+sagaMiddleware.run(rootSaga)
 
 /* Create the authentication config */
 setAuthConfig({
 	apiBase: '/api',
 	clientId: 'test',
 	clientSecret: 'secret',
-});
+})

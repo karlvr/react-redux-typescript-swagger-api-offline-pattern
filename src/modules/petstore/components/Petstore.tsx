@@ -4,8 +4,8 @@
  * Note that this file has a `.tsx` suffix, as it contains React elements.
  */
 
-import * as React from 'react';
-import { Props, Actions } from '../containers/Petstore';
+import * as React from 'react'
+import { Props, Actions } from '../containers/Petstore'
 
 /**
  * Interface for private internal component state.
@@ -19,18 +19,18 @@ interface State {
  */
 const INITIAL_STATE: State = {
 	
-};
+}
 
 export default class Example extends React.Component<Props & Actions, State> {
 
-	state = INITIAL_STATE;
+	state = INITIAL_STATE
 
 	addPet = () => {
-		this.props.onAddPet('test');
+		this.props.onAddPet('test')
 	}
 
 	render() {
-		const { pets } = this.props;
+		const { pets } = this.props
 
 		return (
 			<div>
@@ -66,6 +66,6 @@ export default class Example extends React.Component<Props & Actions, State> {
 					</table>
 				)}
 			</div>
-		);
+		)
 	}
 }

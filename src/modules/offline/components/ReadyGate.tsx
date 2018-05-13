@@ -4,8 +4,8 @@
  * is ready. Ready means it has restored its persistent state using redux-persist / redux-offline.
  */
 
-import * as React from 'react';
-import { Props, Actions } from '../containers/ReadyGate';
+import * as React from 'react'
+import { Props, Actions } from '../containers/ReadyGate'
 
 /**
  * Interface for private internal component state.
@@ -19,21 +19,21 @@ interface State {
  */
 const INITIAL_STATE: State = {
 
-};
+}
 
 export default class ReadyGate extends React.Component<Props & Actions, State> {
 
-	state = INITIAL_STATE;
+	state = INITIAL_STATE
 
 	render() {
-		const { ready, waitComponent: WaitComponent, ...rest } = this.props;
+		const { ready, waitComponent: WaitComponent, ...rest } = this.props
 
 		if (ready) {
-			return this.props.children;
+			return this.props.children
 		} else {
 			return (
 				<WaitComponent {...rest} />
-			);
+			)
 		}
 	}
 }
