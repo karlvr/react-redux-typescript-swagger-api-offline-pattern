@@ -1,21 +1,27 @@
 {
   "name": "typescript-fetch-api",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "swagger client for typescript-fetch-api",
+  "author": "Swagger Codegen Contributors",
+  "keywords": [
+    "fetch",
+    "typescript",
+    "swagger-client",
+    "typescript-fetch-api"
+  ],
   "license": "Unlicense",
-  "main": "./dist/api.js",
-  "browser": "./dist/api.js",
-  "typings": "./dist/api.d.ts",
-  "dependencies": {
-    "core-js": "^2.4.0",
-    "isomorphic-fetch": "^2.2.1"
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts" : {
+    "build": "tsc --outDir dist/",
+    "postinstall": "npm run build"
   },
-  "scripts": {
-    "prepublish": "typings install && tsc",
-    "test": "tslint api.ts"
+  "dependencies": {
+    "portable-fetch": "^3.0.0"
   },
   "devDependencies": {
-    "tslint": "^3.15.1",
-    "typescript": "^1.8.10",
-    "typings": "^1.0.4"
+    "@types/isomorphic-fetch": "0.0.34",
+    "@types/node": "^8.0.9",
+    "typescript": "^2.0"
   }
 }

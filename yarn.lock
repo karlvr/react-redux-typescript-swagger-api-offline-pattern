@@ -3004,7 +3004,7 @@ isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
 
-isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
+isomorphic-fetch@^2.1.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
@@ -4358,6 +4358,13 @@ pkg-dir@^2.0.0:
   resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-2.0.0.tgz#f6d5d1109e19d63edf428e0bd57e12777615334b"
   dependencies:
     find-up "^2.1.0"
+
+portable-fetch@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/portable-fetch/-/portable-fetch-3.0.0.tgz#3cbf4aa6dbc5a5734b41c0419c9273313bfd9ad8"
+  dependencies:
+    node-fetch "^1.0.1"
+    whatwg-fetch ">=0.10.0"
 
 portfinder@^1.0.9:
   version "1.0.13"
@@ -6044,10 +6051,9 @@ type-is@~1.6.15, type-is@~1.6.16:
     mime-types "~2.1.18"
 
 "typescript-fetch-api@file:gen/api":
-  version "0.0.0"
+  version "1.0.0"
   dependencies:
-    core-js "^2.4.0"
-    isomorphic-fetch "^2.2.1"
+    portable-fetch "^3.0.0"
 
 typescript-fsa-reducers@^0.4.5:
   version "0.4.5"
