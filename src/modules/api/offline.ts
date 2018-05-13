@@ -34,7 +34,7 @@ export function handleDiscard(error: {}, action: OfflineAction, retries: number 
 export function handleEffect(effect: {}, action: OfflineAction): Promise<{}> {
 	// TODO this can be broken down into separate module files
 	if (isType(action, petstore.addPet.started)) {
-		return wrapPromise(action, pets.addPet({ body: action.payload }))
+		return wrapPromise(action, pets.addPet(action.payload))
 	} else {
 		return Promise.reject(new Error('Unsupported offline action: ' + action.type))
 	}
