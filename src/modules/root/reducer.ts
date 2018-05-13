@@ -15,24 +15,24 @@ import * as petstore from '../petstore/reducer';
  * the tree of StoreState interfaces, and their contents.
  */
 export interface StoreState {
-    readonly template: template.StoreState;
-    readonly auth: auth.StoreState;
-    readonly petstore: petstore.StoreState;
+	readonly template: template.StoreState;
+	readonly auth: auth.StoreState;
+	readonly petstore: petstore.StoreState;
 
-    readonly ready: boolean;
+	readonly ready: boolean;
 }
 
 const readyReducer = reducerWithInitialState(false)
-    .case(actions.readyAction, (state, payload) => (true))
-    ;
+	.case(actions.readyAction, (state, payload) => (true))
+	;
 
 /**
  * The root reducer, combines reducers for all of the modules / ducks.
  */
 export const reducer = combineReducers<StoreState>({
-    template: template.reducer,
-    auth: auth.reducer,
-    petstore: petstore.reducer,
+	template: template.reducer,
+	auth: auth.reducer,
+	petstore: petstore.reducer,
 
-    ready: readyReducer,
+	ready: readyReducer,
 });

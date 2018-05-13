@@ -15,13 +15,13 @@ import { RootStoreState } from '../../index';
  * Interface for properties that the container passes to the component.
  */
 export interface Props {
-    ready: boolean;
-    waitComponent: React.ComponentType;
+	ready: boolean;
+	waitComponent: React.ComponentType;
 }
 
 export interface OwnProps {
-    /** The component to render while we wait for the app to be ready. */
-    waitComponent: React.ComponentType;
+	/** The component to render while we wait for the app to be ready. */
+	waitComponent: React.ComponentType;
 }
 
 /**
@@ -34,17 +34,17 @@ export interface Actions {
 
 /** Populate the Props from the store state. */
 const mapStateToProps = ({ ready }: RootStoreState, { waitComponent }: OwnProps): Props => {
-    return {
-        ready,
-        waitComponent,
-    };
+	return {
+		ready,
+		waitComponent,
+	};
 };
 
 /** Populate the Actions with the callbacks for the component. */
 const mapDispatchToProps = (dispatch: Dispatch<{}>): Actions => ({
-    // onExample: (value) => {
-    // 	dispatch(actions.examplePrimitiveAction(value));
-    // },
+	// onExample: (value) => {
+	// 	dispatch(actions.examplePrimitiveAction(value));
+	// },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Component);

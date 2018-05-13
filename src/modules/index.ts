@@ -23,38 +23,38 @@ const sagaMiddleware = createSagaMiddleware();
  * Create the redux-offline configuration, based on the default configuration.
  */
 const offlineConfig = {
-    ...defaultOfflineConfig,
+	...defaultOfflineConfig,
 
-    /**
-     * This callback occurs after redux-persist has rehydrated our Redux state.
-     */
-    persistCallback: () => {
-        /* Let our app know that the application state has been rehydrated and is ready to be used. */
-        store.dispatch(readyAction());
-    },
+	/**
+	 * This callback occurs after redux-persist has rehydrated our Redux state.
+	 */
+	persistCallback: () => {
+		/* Let our app know that the application state has been rehydrated and is ready to be used. */
+		store.dispatch(readyAction());
+	},
 
-    /**
-     * This function is used to handle actions tagged for redux-offline to handle.
-     */
-    effect: handleEffect,
-    
-    /**
-     * This function determines whether to discard a request, or to retry in, in the event
-     * of an error.
-     */
-    discard: handleDiscard,
+	/**
+	 * This function is used to handle actions tagged for redux-offline to handle.
+	 */
+	effect: handleEffect,
+	
+	/**
+	 * This function determines whether to discard a request, or to retry in, in the event
+	 * of an error.
+	 */
+	discard: handleDiscard,
 };
 
 /**
  * Enhancers for the store.
  */
 const enhancers = compose(
-    /* Add the redux-offline store enhancer */
-    offline(offlineConfig),
-    /* Add the redux-saga middleware */
-    applyMiddleware(sagaMiddleware),
-    /* Include the devtools. Comment this out if you don't want to use the dev tools. */
-    devToolsEnhancer({}),
+	/* Add the redux-offline store enhancer */
+	offline(offlineConfig),
+	/* Add the redux-saga middleware */
+	applyMiddleware(sagaMiddleware),
+	/* Include the devtools. Comment this out if you don't want to use the dev tools. */
+	devToolsEnhancer({}),
 ) as StoreEnhancer<RootStoreState>;
 
 /**
@@ -68,7 +68,7 @@ sagaMiddleware.run(rootSaga);
 
 /* Create the authentication config */
 setAuthConfig({
-    apiBase: '/api',
-    clientId: 'test',
-    clientSecret: 'secret',
+	apiBase: '/api',
+	clientId: 'test',
+	clientSecret: 'secret',
 });

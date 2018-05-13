@@ -10,29 +10,29 @@ import * as actions from './actions';
  * all of the properties down the tree.
  */
 export interface StoreState {
-    readonly name: string;
+	readonly name: string;
 }
 
 /**
  * The initial store state for this module.
  */
 const INITIAL_STATE: StoreState = {
-    /* Note that we end each property with a comma, so we can add new properties without modifying this line
-    (improve your git diffs!).
-     */
-    name: 'React + Redux + Typescript pattern',
+	/* Note that we end each property with a comma, so we can add new properties without modifying this line
+	(improve your git diffs!).
+	 */
+	name: 'React + Redux + Typescript pattern',
 };
 
 /**
  * Reducer function for this module.
  */
 export const reducer = reducerWithInitialState(INITIAL_STATE)
-    /* Reducer function for the exampleAction that returns a new state using an implicit return. */
-    .case(actions.exampleAction, (state, payload) => ({
-        ...state, name: payload.value
-    }))
-    /* Reducer function for examplePrimitiveAction that returns a new state using an explicit return. */
-    .case(actions.examplePrimitiveAction, (state, name) => {
-        return { ...state, name };
-    })
-    ;
+	/* Reducer function for the exampleAction that returns a new state using an implicit return. */
+	.case(actions.exampleAction, (state, payload) => ({
+		...state, name: payload.value
+	}))
+	/* Reducer function for examplePrimitiveAction that returns a new state using an explicit return. */
+	.case(actions.examplePrimitiveAction, (state, name) => {
+		return { ...state, name };
+	})
+	;

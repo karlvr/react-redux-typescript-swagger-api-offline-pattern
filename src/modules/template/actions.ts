@@ -7,7 +7,7 @@ const actionCreator = actionCreatorFactory('Template');
 
 /* An example action with an interface as its payload. */
 export interface ExampleActionPayload {
-    value: string;
+	value: string;
 }
 export const exampleAction = actionCreator<ExampleActionPayload>('EXAMPLE');
 
@@ -18,7 +18,7 @@ export const examplePrimitiveAction = actionCreator<string>('EXAMPLE_PRIMITIVE')
 action elsewhere in the code.
  */
 export interface ExampleWithMoreTypesActionPayload {
-    value: string;
+	value: string;
 }
 export type ExampleWithMoreTypesAction = Action<ExampleWithMoreTypesActionPayload>;
 export const exampleWithMoreTypesAction = actionCreator<ExampleWithMoreTypesActionPayload>('EXAMPLE_MORE_TYPES');

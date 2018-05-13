@@ -13,8 +13,8 @@ export type RequestPetsAction = Action<undefined>;
 export const requestPets = actionCreator.async<undefined, RequestPetsSuccessPayload, Error>('REQUEST_PETS');
 
 export interface AddPetPayload {
-    name: string;
-    photoUrls: Array<string>;
+	name: string;
+	photoUrls: Array<string>;
 }
 export type AddPetAction = Action<AddPetPayload>;
 export const addPet = wrapOfflineAction(actionCreator.async<AddPetPayload, {}, Error>('ADD_PET'));

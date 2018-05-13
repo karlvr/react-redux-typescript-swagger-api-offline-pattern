@@ -10,11 +10,11 @@ import apiSaga from './api/sagas';
 
 /** The root saga that starts all of the other sagas. */
 export default function* rootSaga() {
-    yield all([
-        /* The API saga */
-        apiSaga(),
+	yield all([
+		/* The API saga */
+		apiSaga(),
 
-        /* The authentication saga */
-        authSaga(),
-    ]);
+		/* The authentication saga */
+		authSaga(),
+	]);
 }

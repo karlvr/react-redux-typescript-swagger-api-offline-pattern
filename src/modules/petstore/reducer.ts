@@ -11,42 +11,42 @@ import { Pet } from './types';
  * all of the properties down the tree.
  */
 export interface StoreState {
-    readonly pets: ReadonlyArray<Pet>;
-    readonly error?: Error;
-    readonly saving: boolean;
+	readonly pets: ReadonlyArray<Pet>;
+	readonly error?: Error;
+	readonly saving: boolean;
 }
 
 /**
  * The initial store state for this module.
  */
 const INITIAL_STATE: StoreState = {
-    pets: [],
-    saving: false,
+	pets: [],
+	saving: false,
 };
 
 /**
  * Reducer function for this module.
  */
 export const reducer = reducerWithInitialState(INITIAL_STATE)
-    .case(actions.requestPets.started, (state) => ({
-        ...state, pets: [],
-    }))
-    .case(actions.requestPets.done, (state, { result: pets }) => ({
-        ...state, pets,
-    }))
-    .case(actions.requestPets.failed, (state, { error }) => ({
-        ...state, error,
-    }))
-    .case(actions.addPet.started, (state, payload) => {
-        /* Add the new pet to our state (at the start) so it appears optimistically. */
-        return {
-            ...state, pets: [ payload, ...state.pets ], saving: true, error: undefined,
-        };
-    })
-    .case(actions.addPet.done, (state, { result }) => ({
-        ...state, saving: false,
-    }))
-    .case(actions.addPet.failed, (state, { error }) => ({
-        ...state, saving: false, error,
-    }))
-    ;
+	.case(actions.requestPets.started, (state) => ({
+		...state, pets: [],
+	}))
+	.case(actions.requestPets.done, (state, { result: pets }) => ({
+		...state, pets,
+	}))
+	.case(actions.requestPets.failed, (state, { error }) => ({
+		...state, error,
+	}))
+	.case(actions.addPet.started, (state, payload) => {
+		/* Add the new pet to our state (at the start) so it appears optimistically. */
+		return {
+			...state, pets: [ payload, ...state.pets ], saving: true, error: undefined,
+		};
+	})
+	.case(actions.addPet.done, (state, { result }) => ({
+		...state, saving: false,
+	}))
+	.case(actions.addPet.failed, (state, { error }) => ({
+		...state, saving: false, error,
+	}))
+	;

@@ -8,8 +8,8 @@ import { AccessToken } from './types';
 const actionCreator = actionCreatorFactory('Auth');
 
 export interface LoginRequestPayload {
-    username: string;
-    password: string;
+	username: string;
+	password: string;
 }
 
 /** Action creator for the login request. The payload contains the username and password requested. */
