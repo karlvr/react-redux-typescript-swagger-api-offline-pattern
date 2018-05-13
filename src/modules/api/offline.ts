@@ -3,7 +3,7 @@
  */
 
 import * as Api from 'typescript-fetch-api';
-import { OfflineAction } from '@redux-offline/redux-offline';
+import { OfflineAction } from '@redux-offline/redux-offline/lib/types';
 import { isType } from 'typescript-fsa';
 
 import * as petstore from '../petstore/actions';
