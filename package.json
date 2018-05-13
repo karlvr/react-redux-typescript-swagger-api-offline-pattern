@@ -20,7 +20,7 @@
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "swagger-codegen": "swagger-codegen generate -i http://petstore.swagger.io/v2/swagger.json -l typescript-fetch -o gen/api && cd gen/api && npm install"
+    "api": "scripts/generate-api.sh http://petstore.swagger.io/v2/swagger.json"
   },
   "devDependencies": {
     "@types/jest": "^21.1.8",
