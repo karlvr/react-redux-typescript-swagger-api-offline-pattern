@@ -1,11 +1,13 @@
-import { createStore, compose, applyMiddleware, StoreEnhancer } from 'redux'
+import { createStore, compose, applyMiddleware, StoreEnhancer, Middleware } from 'redux'
 import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction'
 import createSagaMiddleware from 'redux-saga'
 import { offline } from '@redux-offline/redux-offline'
 import defaultOfflineConfig from '@redux-offline/redux-offline/lib/defaults'
 
-import rootSaga from './sagas'
-import { setConfig as setAuthConfig } from './auth/functions'
+import rootSaga from './root/sagas'
+import { setAuthConfig } from './auth'
+import platform from './platform'
+
 import { readyAction } from './root/actions'
 import { StoreState as RootStoreState, reducer } from './root/reducer'
 
@@ -30,20 +32,28 @@ const offlineConfig = {
 	 */
 	persistCallback: () => {
 		/* Let our app know that the application state has been rehydrated and is ready to be used. */
-		store.dispatch(readyAction())
+		getStore().dispatch(readyAction())
 	},
 
 	/**
 	 * This function is used to handle actions tagged for redux-offline to handle.
 	 */
 	effect: handleEffect,
-	
+
 	/**
 	 * This function determines whether to discard a request, or to retry in, in the event
 	 * of an error.
 	 */
 	discard: handleDiscard,
+
+	/* The commented out function below hard-codes the app to function as if it is offline. */
+	// detectNetwork: function(callback: (online: boolean) => void) {
+	// 	callback(false)
+	// },
 }
+
+let middlewares: Middleware[] = [sagaMiddleware]
+middlewares = platform.customiseReduxMiddleware(middlewares)
 
 /**
  * Enhancers for the store.
@@ -51,8 +61,8 @@ const offlineConfig = {
 const enhancers = compose(
 	/* Add the redux-offline store enhancer */
 	offline(offlineConfig),
-	/* Add the redux-saga middleware */
-	applyMiddleware(sagaMiddleware),
+	/* Add the middlewares */
+	applyMiddleware.apply(null, middlewares),
 	/* Include the devtools. Comment this out if you don't want to use the dev tools. */
 	devToolsEnhancer({}),
 ) as StoreEnhancer<RootStoreState>
@@ -63,12 +73,12 @@ const enhancers = compose(
  */
 export const store = createStore<RootStoreState>(reducer, enhancers)
 
+function getStore() {
+	return store
+}
+
 /* Run the root saga */
 sagaMiddleware.run(rootSaga)
 
 /* Create the authentication config */
-setAuthConfig({
-	apiBase: '/api',
-	clientId: 'test',
-	clientSecret: 'secret',
-})
+setAuthConfig(platform.createAuthConfiguration())

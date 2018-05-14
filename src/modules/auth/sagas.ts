@@ -8,33 +8,48 @@ import { take, call, put, race, select } from 'redux-saga/effects'
 import * as actions from './actions'
 import { authenticate, refresh } from './functions'
 import { LoginRequestPayload } from './actions'
-import { SagaIterator, delay } from 'redux-saga'
+import { SagaIterator } from 'redux-saga'
 import { RootStoreState } from '../index'
-import { AccessToken } from './types'
 import { readyAction } from '../root/actions'
+import { AccessToken } from './types'
 
 import { accessTokenSelector } from './selectors'
+import { offlineOutboxQueueLength } from '../api/selectors'
+import platform from '../platform'
 
 /** Saga handling the state of being logged out. */
 function* loggedOutSaga(): SagaIterator {
-	let loginAction = yield take(actions.loginRequest)
+	/* Wait for a login request, but we also look for a logout request */
+	const loginRaceResult = yield race({
+		loginRequest: take(actions.login.started),
+		logout: take(actions.logoutRequest),
+	})
+	
+	if (loginRaceResult.logout) {
+		/* A logout request may come through if we're only partially logged out. That is we don't
+		   have an access token, but we do have a username set, and we want the user to re-login
+		   without logging out. But they can choose to logout completely, so we handle that here.
+		 */
+		yield call(handleLogoutRequest)
+		return
+	}
 
+	let login = loginRaceResult.loginRequest.payload as LoginRequestPayload
 	try {
-		let login = loginAction.payload as LoginRequestPayload
-		let raceResult = yield race({
-			login: call(authenticate, login.username, login.password),
+		/* Attempt to login, but also let a logout request interrupt our login request */
+		const loggingInRaceResult = yield race({
+			loginResult: call(authenticate, login.username, login.password),
 			logout: take(actions.logoutRequest),
 		})
 
-		if (raceResult.login) {
-			let accessToken = raceResult.login as AccessToken
-
-			yield put(actions.loggedIn(accessToken))
-		} else if (raceResult.logout) {
-			yield put(actions.loggedOut())
+		if (loggingInRaceResult.loginResult) {
+			let accessToken = loggingInRaceResult.loginResult as AccessToken
+			yield put(actions.login.done({ params: login, result: accessToken }))
+		} else if (loggingInRaceResult.logout) {
+			yield call(handleLogoutRequest)
 		}
 	} catch (error) {
-		yield put(actions.loginError(error))
+		yield put(actions.login.failed({ params: login, error }))
 	}
 }
 
@@ -43,11 +58,16 @@ function* loggedInSaga(): SagaIterator {
 	try {
 		let raceResult = yield race({
 			logout: take(actions.logoutRequest),
-			refresh: call(refreshToken),
+			loggedInError: take(actions.loggedInError),
+			refreshTokenFailed: take(actions.refreshTokenFailed),
 		})
 
 		if (raceResult.logout) {
+			yield call(handleLogoutRequest)
+		} else if (raceResult.loggedInError) {
 			yield put(actions.loggedOut())
+		} else if (raceResult.refreshTokenFailed) {
+			/* There's nothing for us to do here, as the routing saga handles this to take us to the login form to reauth. */
 		}
 	} catch (error) {
 		yield put(actions.loggedInError(error))
@@ -55,26 +75,71 @@ function* loggedInSaga(): SagaIterator {
 	}
 }
 
+/** When we request to logout we must check if we have an offline queue that will be lost if
+ *  we actually logout. So we do a confirm step first whenever there is a logout request and our
+ *  offline queue is not empty.
+ */
+function* handleLogoutRequest(): SagaIterator {
+	const queueLength = yield select(offlineOutboxQueueLength)
+	if (queueLength > 0) {
+		const confirmResult = (yield call(
+			platform.confirm, 
+			'Are you sure you want to logout? You have unsynced updates that will be lost.',
+			'Warning!',
+			'Logout')) as boolean
+		if (confirmResult) {
+			yield put(actions.loggedOut())
+		}
+	} else {
+		yield put(actions.loggedOut())
+	}
+}
+
 /** Yields a boolean result, whether there is a user logged in or not. */
-function* loggedIn(): SagaIterator {
+export function* loggedIn(): SagaIterator {
 	let accessToken = yield select<RootStoreState>(accessTokenSelector)
 	return accessToken !== undefined
 }
 
-function* refreshToken(): SagaIterator {
+var refreshingToken = false
+
+export function* refreshTokenNow(): SagaIterator {
 	let accessToken = (yield select<RootStoreState>(accessTokenSelector)) as AccessToken
 	if (!accessToken) {
 		throw new Error('Not logged in')
 	}
 
-	let waitTime = accessToken.refreshAt - Date.now()
-	yield call(delay, waitTime)
+	if (!refreshingToken) {
+		refreshingToken = true
+		try {
+			let refreshedAccessToken = (yield call(refresh, accessToken.refresh_token)) as AccessToken
+			refreshingToken = false
+			yield put(actions.refreshedToken(refreshedAccessToken))
+			return true
+		} catch (error) {
+			refreshingToken = false
 
-	let refreshedAccessToken = (yield call(refresh, accessToken.refresh_token)) as AccessToken
-	if (refreshedAccessToken) {
-		yield put(actions.loggedIn(refreshedAccessToken))
+			// TODO: this is nasty relying on the error message format
+			if (error.message === 'Auth request failed: invalid_grant') {
+				yield put(actions.refreshTokenFailed(Date.now()))
+			}
+			return false
+		}
 	} else {
-		yield put(actions.loggedInError(new Error('Failed to refresh access token')))
+		/* The token is already being refreshed, so wait for the result of that operation, so we don't
+		   double-up our refresh requests.
+		 */
+		const raceResult = yield race({
+			refreshedToken: take(actions.refreshedToken),
+			loggedInError: take(actions.loggedInError),
+			refreshTokenFailed: take(actions.refreshTokenFailed),
+		})
+
+		if (raceResult.refreshedToken) {
+			return true
+		} else {
+			return false
+		}
 	}
 }
 

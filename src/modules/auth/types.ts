@@ -20,7 +20,6 @@ export interface AccessToken {
  * Configuration for the OAuth 2 functions.
  */
 export interface Config {
-	readonly apiBase: string
 	readonly clientId: string
 	readonly clientSecret: string
 }

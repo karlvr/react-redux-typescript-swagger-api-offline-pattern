@@ -1,7 +1,6 @@
 import actionCreatorFactory, { Action } from 'typescript-fsa'
 
 import { Pet } from './types'
-import { wrapOfflineAction } from '../api/utils'
 
 /**
  * The action creator for this module. Note that it contains the module name.
@@ -17,4 +16,4 @@ export interface AddPetPayload {
 	photoUrls: Array<string>
 }
 export type AddPetAction = Action<AddPetPayload>
-export const addPet = wrapOfflineAction(actionCreator.async<AddPetPayload, {}, Error>('ADD_PET'))
+export const addPet = actionCreator<AddPetPayload>('ADD_PET')

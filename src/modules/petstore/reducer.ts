@@ -13,7 +13,6 @@ import { Pet } from './types'
 export interface StoreState {
 	readonly pets: ReadonlyArray<Pet>
 	readonly error?: Error
-	readonly saving: boolean
 }
 
 /**
@@ -21,7 +20,6 @@ export interface StoreState {
  */
 const INITIAL_STATE: StoreState = {
 	pets: [],
-	saving: false,
 }
 
 /**
@@ -37,15 +35,8 @@ export const reducer = reducerWithInitialState(INITIAL_STATE)
 	.case(actions.requestPets.failed, (state, { error }) => ({
 		...state, error,
 	}))
-	.case(actions.addPet.started, (state, payload) => {
-		/* Add the new pet to our state (at the start) so it appears optimistically. */
+	.case(actions.addPet, (state, payload) => {
 		return {
-			...state, pets: [ payload, ...state.pets ], saving: true, error: undefined,
+			...state, pets: [ payload, ...state.pets ], error: undefined,
 		}
 	})
-	.case(actions.addPet.done, (state, { result }) => ({
-		...state, saving: false,
-	}))
-	.case(actions.addPet.failed, (state, { error }) => ({
-		...state, saving: false, error,
-	}))

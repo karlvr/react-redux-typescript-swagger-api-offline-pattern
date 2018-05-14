@@ -20,7 +20,6 @@ import { Pet } from '../types'
  */
 export interface Props {
 	pets: ReadonlyArray<Pet>
-	saving: boolean
 	error?: Error
 }
 
@@ -37,7 +36,6 @@ export interface Actions {
 const mapStateToProps = ({ petstore }: RootStoreState): Props => {
 	return {
 		pets: petstore.pets,
-		saving: petstore.saving,
 		error: petstore.error,
 	}
 }
@@ -48,7 +46,7 @@ const mapDispatchToProps = (dispatch: Dispatch<{}>): Actions => ({
 		dispatch(actions.requestPets.started(undefined))
 	},
 	onAddPet: (name) => {
-		dispatch(actions.addPet.started({
+		dispatch(actions.addPet({
 			name,
 			photoUrls: [''],
 		}))

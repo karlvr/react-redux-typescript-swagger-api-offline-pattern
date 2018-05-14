@@ -39,9 +39,6 @@ export default class Example extends React.Component<Props & Actions, State> {
 					<button onClick={this.props.loadPets}>Reload</button>
 					&nbsp;
 					<button onClick={this.addPet}>Add Pet</button>
-					{this.props.saving && (
-						<span>Saving&hellip;</span>
-					)}
 				</p>
 				{this.props.error && (
 					<p style={{color: 'red'}}>{this.props.error.message}</p>

@@ -2,22 +2,18 @@
  * Functions for sending OAuth2 requests to the server.
  */
 
-import { AccessToken, Config } from './types'
-
-/** The authentication module config, with default values.
- * Use the setConfig method to update the config.
- */
-let config: Config = {
-	apiBase: '/auth',
-	clientId: 'test',
-	clientSecret: 'secret',
-}
+import { AccessToken } from './types'
+import * as url from 'url'
+import { store } from '..'
+import * as actions from './actions'
+import { configuration as apiConfiguration } from '../api/index'
+import { getAuthConfig } from '.'
 
 /** How many seconds before the access token expires do we refresh it */
 const REFRESH_TOKEN_WINDOW = 60
 
 function fetchAccessToken(options: RequestInit): Promise<AccessToken> {
-	return fetch(config.apiBase + '/token', options)
+	return fetch(apiConfiguration.basePath + '/token', options)
 		.then(response => {
 			if (response.ok) {
 				return response.json()
@@ -48,16 +44,22 @@ function fetchAccessToken(options: RequestInit): Promise<AccessToken> {
 
 /** Attempt to obtain an AccessToken with the given credentials. */
 export function authenticate(username: string, password: string): Promise<AccessToken> {
-	let formData = new URLSearchParams()
-	formData.append('client_id', config.clientId)
-	formData.append('client_secret', config.clientSecret)
-	formData.append('grant_type', 'password')
-	formData.append('username', username)
-	formData.append('password', password)
+	const config = getAuthConfig()
+	let query = {
+		client_id: config.clientId,
+		client_secret: config.clientSecret,
+		grant_type: 'password',
+		username,
+		password,
+	}
+	let formData = url.format({ query }).substring(1)
 
 	let options: RequestInit = {
 		method: 'POST',
-		body: formData
+		body: formData,
+		headers: {
+			'content-type': 'application/x-www-form-urlencoded'
+		}
 	}
 	return fetchAccessToken(options)
 }
@@ -66,19 +68,43 @@ export function authenticate(username: string, password: string): Promise<Access
  * Returns a new AccessToken.
  */
 export function refresh(refreshToken: string): Promise<AccessToken> {
-	let formData = new URLSearchParams()
-	formData.append('client_id', config.clientId)
-	formData.append('client_secret', config.clientSecret)
-	formData.append('grant_type', 'refresh_token')
-	formData.append('refresh_token', refreshToken)
+	const config = getAuthConfig()
+	let query = {
+		client_id: config.clientId,
+		client_secret: config.clientSecret,
+		grant_type: 'refresh_token',
+		refresh_token: refreshToken,
+	}
+	let formData = url.format({ query }).substring(1)
 
 	let options: RequestInit = {
 		method: 'POST',
-		body: formData
+		body: formData,
+		headers: {
+			'content-type': 'application/x-www-form-urlencoded'
+		}
 	}
 	return fetchAccessToken(options)
 }
 
-export function setConfig(newConfig: Config) {
-	config = newConfig
+/** Refresh the access token, apply it to the store, and return a promise
+ * indicating whether or not it was successful. This methods gets the current
+ * refresh token from the store, so there's no need to know any context to
+ * call it.
+ */
+export function refreshTokenAndApply(): Promise<AccessToken> {
+	return new Promise((resolve, reject) => {
+		let accessToken = store.getState().auth.accessToken
+		if (accessToken) {
+			refresh(accessToken.refresh_token).then(refreshedAccessToken => {
+				store.dispatch(actions.refreshedToken(refreshedAccessToken))
+				resolve(refreshedAccessToken)
+			}).catch(error => {
+				store.dispatch(actions.refreshTokenFailed(Date.now()))
+				reject(error)
+			})
+		} else {
+			reject(new Error('Not logged in'))
+		}
+	})
 }

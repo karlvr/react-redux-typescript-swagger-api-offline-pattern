@@ -43,7 +43,7 @@ const mapStateToProps = (state: RootStoreState): Props => {
 /** Populate the Actions with the callbacks for the component. */
 const mapDispatchToProps = (dispatch: Dispatch<{}>): Actions => ({
 	onLogin: (username, password) => {
-		dispatch(actions.loginRequest({ username, password }))
+		dispatch(actions.login.started({ username, password }))
 	},
 	onLogout: () => {
 		dispatch(actions.logoutRequest())
