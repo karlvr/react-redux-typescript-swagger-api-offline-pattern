@@ -6,7 +6,7 @@
 import Component from '../components/Login'
 
 import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
+import { Dispatch, Action } from 'redux'
 
 /* Import RootStoreState */
 import { RootStoreState } from '../../index'
@@ -41,7 +41,7 @@ const mapStateToProps = (state: RootStoreState): Props => {
 }
 
 /** Populate the Actions with the callbacks for the component. */
-const mapDispatchToProps = (dispatch: Dispatch<{}>): Actions => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<{}>>): Actions => ({
 	onLogin: (username, password) => {
 		dispatch(actions.login.started({ username, password }))
 	},
