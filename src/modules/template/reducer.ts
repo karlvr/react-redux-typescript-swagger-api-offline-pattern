@@ -27,11 +27,13 @@ const INITIAL_STATE: StoreState = {
  * Reducer function for this module.
  */
 export const reducer = reducerWithInitialState(INITIAL_STATE)
-	/* Reducer function for the exampleAction that returns a new state using an implicit return. */
-	.case(actions.exampleAction, (state, payload) => ({
-		...state, name: payload.value
-	}))
-	/* Reducer function for examplePrimitiveAction that returns a new state using an explicit return. */
-	.case(actions.examplePrimitiveAction, (state, name) => {
-		return { ...state, name }
-	})
+
+/** Reducer function for the exampleAction that returns a new state using an implicit return. */
+reducer.case(actions.exampleAction, (state, payload) => ({
+	...state, name: payload.value
+}))
+
+/** Reducer function for examplePrimitiveAction that returns a new state using an explicit return. */
+reducer.case(actions.examplePrimitiveAction, (state, name) => {
+	return { ...state, name }
+})

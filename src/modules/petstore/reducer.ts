@@ -26,17 +26,21 @@ const INITIAL_STATE: StoreState = {
  * Reducer function for this module.
  */
 export const reducer = reducerWithInitialState(INITIAL_STATE)
-	.case(actions.requestPets.started, (state) => ({
-		...state, pets: [],
-	}))
-	.case(actions.requestPets.done, (state, { result: pets }) => ({
-		...state, pets,
-	}))
-	.case(actions.requestPets.failed, (state, { error }) => ({
-		...state, error,
-	}))
-	.case(actions.addPet, (state, payload) => {
-		return {
-			...state, pets: [ payload, ...state.pets ], error: undefined,
-		}
-	})
+
+reducer.case(actions.requestPets.started, (state) => ({
+	...state, pets: [],
+}))
+
+reducer.case(actions.requestPets.done, (state, { result: pets }) => ({
+	...state, pets,
+}))
+
+reducer.case(actions.requestPets.failed, (state, { error }) => ({
+	...state, error,
+}))
+
+reducer.case(actions.addPet, (state, payload) => {
+	return {
+		...state, pets: [ payload, ...state.pets ], error: undefined,
+	}
+})
