@@ -41,7 +41,7 @@ const mapStateToProps = ({ petstore }: RootStoreState): Props => {
 }
 
 /** Populate the Actions with the callbacks for the component. */
-const mapDispatchToProps = (dispatch: Dispatch<Action<{}>>): Actions => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action>): Actions => ({
 	loadPets: () => {
 		dispatch(actions.requestPets.started(undefined))
 	},
