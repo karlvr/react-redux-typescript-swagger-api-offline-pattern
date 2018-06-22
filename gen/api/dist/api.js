@@ -25,7 +25,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var url = require("url");
 var portableFetch = require("portable-fetch");
-var BASE_PATH = "http://petstore.swagger.io/v2".replace(/\/+$/, "");
+var BASE_PATH = "https://petstore.swagger.io/v2".replace(/\/+$/, "");
 /**
  *
  * @export
@@ -154,11 +154,11 @@ exports.PetApiFetchParamCreator = function (configuration) {
          *
          * @summary Deletes a pet
          * @param {number} petId Pet id to delete
-         * @param {string} [apiKey]
+         * @param {string} [api_key]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePet: function (petId, apiKey, options) {
+        deletePet: function (petId, api_key, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'petId' is not null or undefined
             if (petId === null || petId === undefined) {
@@ -178,8 +178,8 @@ exports.PetApiFetchParamCreator = function (configuration) {
                     : configuration.accessToken;
                 localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
             }
-            if (apiKey !== undefined && apiKey !== null) {
-                localVarHeaderParameter['api_key'] = String(apiKey);
+            if (api_key !== undefined && api_key !== null) {
+                localVarHeaderParameter['api_key'] = String(api_key);
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -193,7 +193,7 @@ exports.PetApiFetchParamCreator = function (configuration) {
         /**
          * Multiple status values can be provided with comma separated strings
          * @summary Finds Pets by status
-         * @param {Array&lt;string&gt;} status Status values that need to be considered for filter
+         * @param {Array<'available' | 'pending' | 'sold'>} status Status values that need to be considered for filter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -231,7 +231,7 @@ exports.PetApiFetchParamCreator = function (configuration) {
         /**
          * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
          * @summary Finds Pets by tags
-         * @param {Array&lt;string&gt;} tags Tags to filter by
+         * @param {Array<string>} tags Tags to filter by
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -467,12 +467,12 @@ exports.PetApiFp = function (configuration) {
          *
          * @summary Deletes a pet
          * @param {number} petId Pet id to delete
-         * @param {string} [apiKey]
+         * @param {string} [api_key]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePet: function (petId, apiKey, options) {
-            var localVarFetchArgs = exports.PetApiFetchParamCreator(configuration).deletePet(petId, apiKey, options);
+        deletePet: function (petId, api_key, options) {
+            var localVarFetchArgs = exports.PetApiFetchParamCreator(configuration).deletePet(petId, api_key, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -489,7 +489,7 @@ exports.PetApiFp = function (configuration) {
         /**
          * Multiple status values can be provided with comma separated strings
          * @summary Finds Pets by status
-         * @param {Array&lt;string&gt;} status Status values that need to be considered for filter
+         * @param {Array<'available' | 'pending' | 'sold'>} status Status values that need to be considered for filter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -511,7 +511,7 @@ exports.PetApiFp = function (configuration) {
         /**
          * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
          * @summary Finds Pets by tags
-         * @param {Array&lt;string&gt;} tags Tags to filter by
+         * @param {Array<string>} tags Tags to filter by
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -644,17 +644,17 @@ exports.PetApiFactory = function (configuration, fetch, basePath) {
          *
          * @summary Deletes a pet
          * @param {number} petId Pet id to delete
-         * @param {string} [apiKey]
+         * @param {string} [api_key]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePet: function (petId, apiKey, options) {
-            return exports.PetApiFp(configuration).deletePet(petId, apiKey, options)(fetch, basePath);
+        deletePet: function (petId, api_key, options) {
+            return exports.PetApiFp(configuration).deletePet(petId, api_key, options)(fetch, basePath);
         },
         /**
          * Multiple status values can be provided with comma separated strings
          * @summary Finds Pets by status
-         * @param {Array&lt;string&gt;} status Status values that need to be considered for filter
+         * @param {Array<'available' | 'pending' | 'sold'>} status Status values that need to be considered for filter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -664,7 +664,7 @@ exports.PetApiFactory = function (configuration, fetch, basePath) {
         /**
          * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
          * @summary Finds Pets by tags
-         * @param {Array&lt;string&gt;} tags Tags to filter by
+         * @param {Array<string>} tags Tags to filter by
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -731,7 +731,7 @@ var PetApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Add a new pet to the store
-     * @param {} body Pet object that needs to be added to the store
+     * @param {Pet} body Pet object that needs to be added to the store
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -742,19 +742,19 @@ var PetApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Deletes a pet
-     * @param {} petId Pet id to delete
-     * @param {} [apiKey]
+     * @param {number} petId Pet id to delete
+     * @param {string} [api_key]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
      */
-    PetApi.prototype.deletePet = function (petId, apiKey, options) {
-        return exports.PetApiFp(this.configuration).deletePet(petId, apiKey, options)(this.fetch, this.basePath);
+    PetApi.prototype.deletePet = function (petId, api_key, options) {
+        return exports.PetApiFp(this.configuration).deletePet(petId, api_key, options)(this.fetch, this.basePath);
     };
     /**
      * Multiple status values can be provided with comma separated strings
      * @summary Finds Pets by status
-     * @param {} status Status values that need to be considered for filter
+     * @param {Array<'available' | 'pending' | 'sold'>} status Status values that need to be considered for filter
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -765,7 +765,7 @@ var PetApi = /** @class */ (function (_super) {
     /**
      * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
      * @summary Finds Pets by tags
-     * @param {} tags Tags to filter by
+     * @param {Array<string>} tags Tags to filter by
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -776,7 +776,7 @@ var PetApi = /** @class */ (function (_super) {
     /**
      * Returns a single pet
      * @summary Find pet by ID
-     * @param {} petId ID of pet to return
+     * @param {number} petId ID of pet to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -787,7 +787,7 @@ var PetApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Update an existing pet
-     * @param {} body Pet object that needs to be added to the store
+     * @param {Pet} body Pet object that needs to be added to the store
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -798,9 +798,9 @@ var PetApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Updates a pet in the store with form data
-     * @param {} petId ID of pet that needs to be updated
-     * @param {} [name] Updated name of the pet
-     * @param {} [status] Updated status of the pet
+     * @param {number} petId ID of pet that needs to be updated
+     * @param {string} [name] Updated name of the pet
+     * @param {string} [status] Updated status of the pet
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -811,9 +811,9 @@ var PetApi = /** @class */ (function (_super) {
     /**
      *
      * @summary uploads an image
-     * @param {} petId ID of pet to update
-     * @param {} [additionalMetadata] Additional data to pass to server
-     * @param {} [file] file to upload
+     * @param {number} petId ID of pet to update
+     * @param {string} [additionalMetadata] Additional data to pass to server
+     * @param {any} [file] file to upload
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -1103,7 +1103,7 @@ var StoreApi = /** @class */ (function (_super) {
     /**
      * For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
      * @summary Delete purchase order by ID
-     * @param {} orderId ID of the order that needs to be deleted
+     * @param {number} orderId ID of the order that needs to be deleted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StoreApi
@@ -1124,7 +1124,7 @@ var StoreApi = /** @class */ (function (_super) {
     /**
      * For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
      * @summary Find purchase order by ID
-     * @param {} orderId ID of pet that needs to be fetched
+     * @param {number} orderId ID of pet that needs to be fetched
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StoreApi
@@ -1135,7 +1135,7 @@ var StoreApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Place an order for a pet
-     * @param {} body order placed for purchasing the pet
+     * @param {Order} body order placed for purchasing the pet
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StoreApi
@@ -1185,7 +1185,7 @@ exports.UserApiFetchParamCreator = function (configuration) {
         /**
          *
          * @summary Creates list of users with given input array
-         * @param {Array&lt;User&gt;} body List of user object
+         * @param {Array<User>} body List of user object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1215,7 +1215,7 @@ exports.UserApiFetchParamCreator = function (configuration) {
         /**
          *
          * @summary Creates list of users with given input array
-         * @param {Array&lt;User&gt;} body List of user object
+         * @param {Array<User>} body List of user object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1427,7 +1427,7 @@ exports.UserApiFp = function (configuration) {
         /**
          *
          * @summary Creates list of users with given input array
-         * @param {Array&lt;User&gt;} body List of user object
+         * @param {Array<User>} body List of user object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1449,7 +1449,7 @@ exports.UserApiFp = function (configuration) {
         /**
          *
          * @summary Creates list of users with given input array
-         * @param {Array&lt;User&gt;} body List of user object
+         * @param {Array<User>} body List of user object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1600,7 +1600,7 @@ exports.UserApiFactory = function (configuration, fetch, basePath) {
         /**
          *
          * @summary Creates list of users with given input array
-         * @param {Array&lt;User&gt;} body List of user object
+         * @param {Array<User>} body List of user object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1610,7 +1610,7 @@ exports.UserApiFactory = function (configuration, fetch, basePath) {
         /**
          *
          * @summary Creates list of users with given input array
-         * @param {Array&lt;User&gt;} body List of user object
+         * @param {Array<User>} body List of user object
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1684,7 +1684,7 @@ var UserApi = /** @class */ (function (_super) {
     /**
      * This can only be done by the logged in user.
      * @summary Create user
-     * @param {} body Created user object
+     * @param {User} body Created user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1695,7 +1695,7 @@ var UserApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {} body List of user object
+     * @param {Array<User>} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1706,7 +1706,7 @@ var UserApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {} body List of user object
+     * @param {Array<User>} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1717,7 +1717,7 @@ var UserApi = /** @class */ (function (_super) {
     /**
      * This can only be done by the logged in user.
      * @summary Delete user
-     * @param {} username The name that needs to be deleted
+     * @param {string} username The name that needs to be deleted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1728,7 +1728,7 @@ var UserApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Get user by user name
-     * @param {} username The name that needs to be fetched. Use user1 for testing.
+     * @param {string} username The name that needs to be fetched. Use user1 for testing.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1739,8 +1739,8 @@ var UserApi = /** @class */ (function (_super) {
     /**
      *
      * @summary Logs user into the system
-     * @param {} username The user name for login
-     * @param {} password The password for login in clear text
+     * @param {string} username The user name for login
+     * @param {string} password The password for login in clear text
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1761,8 +1761,8 @@ var UserApi = /** @class */ (function (_super) {
     /**
      * This can only be done by the logged in user.
      * @summary Updated user
-     * @param {} username name that need to be updated
-     * @param {} body Updated user object
+     * @param {string} username name that need to be updated
+     * @param {User} body Updated user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
