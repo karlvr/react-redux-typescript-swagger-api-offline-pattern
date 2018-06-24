@@ -2,7 +2,7 @@ import { put, call, select } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
 import { Action, AsyncActionCreators } from 'typescript-fsa'
 
-import { refreshTokenNow } from '../auth/sagas'
+import { refreshTokenNow } from 'auth/sagas'
 import * as selectors from './selectors'
 
 /** A generic function for calling API while calling typescript-fsa async action's done and failed

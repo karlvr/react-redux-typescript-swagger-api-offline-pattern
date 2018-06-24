@@ -2,7 +2,7 @@
  * Store state selectors for the authentication module.
  */
 
-import { RootStoreState } from '../index'
+import { RootStoreState } from 'root/index'
 
 /**
  * 

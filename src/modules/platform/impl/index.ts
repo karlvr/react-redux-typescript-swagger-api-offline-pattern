@@ -1,7 +1,7 @@
 /** Platform specific implementations. */
 import { Middleware, ReducersMapObject } from 'redux'
 
-import { Config } from '../../auth/types'
+import { Config } from 'auth/types'
 import { PlatformSupport } from '../index'
 
 const platformSupportImplementation: PlatformSupport = {

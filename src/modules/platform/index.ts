@@ -1,6 +1,6 @@
 import { Middleware, ReducersMapObject } from 'redux'
 
-import { Config } from '../auth/types'
+import { Config } from 'auth/types'
 import platformSupportImplementation from './impl'
 
 export interface PlatformSupport {

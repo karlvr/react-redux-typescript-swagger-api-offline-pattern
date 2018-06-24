@@ -7,7 +7,7 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers/dist'
 import * as actions from './actions'
 import { AccessToken } from './types'
-import { readyAction } from '../root/actions'
+import { readyAction } from 'root/actions'
 
 /** The store state for the auth module. */
 export interface StoreState {

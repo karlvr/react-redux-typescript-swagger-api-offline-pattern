@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { Action, Dispatch } from 'redux'
 
 /* Import RootStoreState */
-import { RootStoreState } from '../../index'
+import { RootStoreState } from 'root/index'
 
 /* Import module files */
 import * as actions from '../actions'

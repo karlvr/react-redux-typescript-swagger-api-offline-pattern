@@ -9,13 +9,13 @@ import * as actions from './actions'
 import { authenticate, refresh } from './functions'
 import { LoginRequestPayload } from './actions'
 import { SagaIterator } from 'redux-saga'
-import { RootStoreState } from '../index'
+import { RootStoreState } from 'root/index'
 import { readyAction } from '../root/actions'
 import { AccessToken } from './types'
 
 import { accessTokenSelector } from './selectors'
-import { offlineOutboxQueueLength } from '../api/selectors'
-import platform from '../platform'
+import { offlineOutboxQueueLength } from 'api/selectors'
+import platform from 'platform/index'
 
 /** Saga handling the state of being logged out. */
 function* loggedOutSaga(): SagaIterator {

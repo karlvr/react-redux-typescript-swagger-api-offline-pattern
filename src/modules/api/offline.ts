@@ -6,7 +6,7 @@ import { OfflineAction } from '@redux-offline/redux-offline/lib/types'
 import { Failure, ActionCreator, AsyncActionCreators, Meta, Action } from 'typescript-fsa'
 
 import * as actions from './actions'
-import { refreshTokenAndApply } from '../auth/functions'
+import { refreshTokenAndApply } from 'auth/functions'
 
 type GenericActionCreatorFunction = ((result: {}) => ({}))
 

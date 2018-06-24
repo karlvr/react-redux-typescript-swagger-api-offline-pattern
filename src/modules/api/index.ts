@@ -1,7 +1,7 @@
 import * as Api from 'typescript-fetch-api'
 
 import { fetchTimeout } from './timeout'
-import { prepareConfigurationForAuth } from '../auth'
+import { prepareConfigurationForAuth } from 'auth/index'
 
 /** The API configuration. */
 export const configuration = new Api.Configuration({

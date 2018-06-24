@@ -4,17 +4,17 @@ import createSagaMiddleware from 'redux-saga'
 import { offline } from '@redux-offline/redux-offline'
 import defaultOfflineConfig from '@redux-offline/redux-offline/lib/defaults'
 
-import rootSaga from './root/sagas'
-import { setAuthConfig } from './auth'
-import platform from './platform'
+import rootSaga from './sagas'
+import { setAuthConfig } from 'auth/index'
+import platform from 'platform/index'
 
-import { readyAction } from './root/actions'
-import { StoreState as RootStoreState, reducer } from './root/reducer'
+import { readyAction } from './actions'
+import { StoreState as RootStoreState, reducer } from './reducer'
 
 export type RootStoreState = RootStoreState
 
 /* API handling */
-import { handleDiscard, handleEffect } from './api/offline'
+import { handleDiscard, handleEffect } from 'api/offline'
 
 /**
  * Create the redux-saga middleware.
