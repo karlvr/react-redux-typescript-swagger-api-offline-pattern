@@ -10,7 +10,7 @@ import { refreshTokenAndApply } from 'auth/functions'
 
 type GenericActionCreatorFunction = ((result: {}) => ({}))
 
-type ApiActionHandler<P> = (payload: P) => Promise<object | undefined>
+type ApiActionHandler<P> = (payload: P, options: RequestInit) => Promise<object | undefined>
 
 /** Wrap promise results into the result format expected by typescript-fsa async actions so
  * the payload on the done and failed actions matches the type signatures provided by
@@ -22,7 +22,7 @@ function apiPromise(action: OfflineAction, retry: boolean = true): Promise<objec
 		return Promise.reject({ params: action.payload, error: new Error('No offline API handler found for action: ' + action.type) })
 	}
 
-	let promise = handler(action.payload!)
+	let promise = handler(action.payload!, {})
 	return promise.then(result => {
 		return Promise.resolve({ params: action.payload, result })
 	}).catch(error => {
