@@ -14,6 +14,7 @@ import { ChangeEvent } from 'react'
 interface State {
 	username: string
 	password: string
+	rememberMe: boolean
 }
 
 /**
@@ -22,18 +23,15 @@ interface State {
 const INITIAL_STATE: State = {
 	username: '',
 	password: '',
+	rememberMe: false,
 }
 
-export default class Example extends React.Component<Props & Actions, State> {
+export default class Login extends React.Component<Props & Actions, State> {
 
 	state = INITIAL_STATE
 
-	/**
-	 * An ES6 function definition. We define the function like this, rather than as per
-	 * the render() function below so that it binds `this` automatically.
-	 */
 	doLogin = () => {
-		this.props.onLogin(this.state.username, this.state.password)
+		this.props.onLogin(this.state)
 	}
 
 	doLogout = () => {
@@ -49,6 +47,12 @@ export default class Example extends React.Component<Props & Actions, State> {
 	handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
 		this.setState({
 			password: e.target.value,
+		})
+	}
+
+	handleRememberMe = (e: ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			rememberMe: e.target.checked,
 		})
 	}
 

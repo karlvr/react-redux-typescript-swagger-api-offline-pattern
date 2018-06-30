@@ -3,16 +3,11 @@
  */
 
 import actionCreatorFactory from 'typescript-fsa'
-import { AccessToken } from './types'
+import { AccessToken, LoginRequest } from './types'
 
 const actionCreator = actionCreatorFactory('Auth')
 
-export interface LoginRequestPayload {
-	username: string
-	password: string
-}
-
-export const login = actionCreator.async<LoginRequestPayload, AccessToken, Error>('LOGIN')
+export const login = actionCreator.async<LoginRequest, AccessToken, Error>('LOGIN')
 
 export const refreshedToken = actionCreator<AccessToken>('REFRESHED_TOKEN')
 

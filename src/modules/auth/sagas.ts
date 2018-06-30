@@ -7,11 +7,10 @@
 import { take, call, put, race, select } from 'redux-saga/effects'
 import * as actions from './actions'
 import { authenticate, refresh } from './functions'
-import { LoginRequestPayload } from './actions'
 import { SagaIterator } from 'redux-saga'
 import { RootStoreState } from 'root/index'
 import { readyAction } from '../root/actions'
-import { AccessToken } from './types'
+import { AccessToken, LoginRequest } from './types'
 
 import { accessTokenSelector } from './selectors'
 import { offlineOutboxQueueLength } from 'api/selectors'
@@ -34,7 +33,8 @@ function* loggedOutSaga(): SagaIterator {
 		return
 	}
 
-	let login = loginRaceResult.loginRequest.payload as LoginRequestPayload
+	let login = loginRaceResult.loginRequest.payload as LoginRequest
+
 	try {
 		/* Attempt to login, but also let a logout request interrupt our login request */
 		const loggingInRaceResult = yield race({

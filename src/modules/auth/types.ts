@@ -6,6 +6,12 @@
  * 
  * Properties are marked as readonly because we store the access token in the Redux state.
  */
+
+export interface LoginRequest {
+	username: string
+	password: string
+	rememberMe: boolean
+}
 export interface AccessToken {
 	readonly access_token: string
 	readonly token_type: string
@@ -20,6 +26,7 @@ export interface AccessToken {
  * Configuration for the OAuth 2 functions.
  */
 export interface Config {
+	readonly tokenEndpoint: string
 	readonly clientId: string
 	readonly clientSecret: string
 }

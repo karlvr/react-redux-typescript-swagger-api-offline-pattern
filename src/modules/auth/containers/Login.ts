@@ -14,6 +14,7 @@ import { RootStoreState } from 'root/index'
 /* Import module files */
 import * as actions from '../actions'
 import { accessTokenSelector } from '../selectors'
+import { LoginRequest } from '../types'
 
 /**
  * Interface for properties that the container passes to the component.
@@ -28,7 +29,7 @@ export interface Props {
  * The component's `this.props` is typed `Props & Actions`.
  */
 export interface Actions {
-	onLogin: (username: string, password: string) => void
+	onLogin: (request: LoginRequest) => void
 	onLogout: () => void
 }
 
@@ -42,8 +43,8 @@ const mapStateToProps = (state: RootStoreState): Props => {
 
 /** Populate the Actions with the callbacks for the component. */
 const mapDispatchToProps = (dispatch: Dispatch<Action>): Actions => ({
-	onLogin: (username, password) => {
-		dispatch(actions.login.started({ username, password }))
+	onLogin: (request) => {
+		dispatch(actions.login.started(request))
 	},
 	onLogout: () => {
 		dispatch(actions.logoutRequest())
