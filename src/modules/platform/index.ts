@@ -1,17 +1,24 @@
-import { Middleware, ReducersMapObject } from 'redux'
+import { Middleware, ReducersMapObject, Reducer, Action } from 'redux'
+import * as Api from 'typescript-fetch-api'
 
 import { Config } from 'auth/types'
 import platformSupportImplementation from './impl'
+import { RootStoreState } from 'root/index'
 
 export interface PlatformSupport {
 	customiseReduxMiddleware: (middlewares: Middleware[]) => Middleware[]
 
-	customiseReducers: (reducers: ReducersMapObject) => ReducersMapObject
+	customiseRootReducer: (reducer: Reducer<RootStoreState>) => Reducer<RootStoreState>
+
+	customiseReducers: <S, A extends Action>(reducers: ReducersMapObject<S, A>) => ReducersMapObject<S, A>
 
 	/** Display a message to the user, asking them to confirm the given message. */
 	confirm(message: string, title: string, confirmAction: string): Promise<boolean>
 
-	/* Create and return the authentication configuration */
+	/** Create and return the API configuration parameters */
+	createApiConfigurationParams(): Api.ConfigurationParameters
+
+	/** Create and return the authentication configuration */
 	createAuthConfiguration(): Config
 }
 

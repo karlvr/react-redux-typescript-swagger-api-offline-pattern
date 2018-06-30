@@ -1,7 +1,8 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { combineReducers } from 'redux'
 
-import * as actions from './actions'
+import platform from 'platform/index'
+import * as a from './actions'
 
 /* Import reducers from our modules */
 import * as template from 'template/reducer'
@@ -23,15 +24,15 @@ export interface StoreState {
 }
 
 const readyReducer = reducerWithInitialState(false)
-	.case(actions.readyAction, (state, payload) => (true))
+	.case(a.readyAction, (state, payload) => (true))
 
 /**
  * The root reducer, combines reducers for all of the modules / ducks.
  */
-export const reducer = combineReducers<StoreState>({
+export const reducer = platform.customiseRootReducer(combineReducers<StoreState>(platform.customiseReducers({
 	template: template.reducer,
 	auth: auth.reducer,
 	petstore: petstore.reducer,
 
 	ready: readyReducer,
-})
+})))

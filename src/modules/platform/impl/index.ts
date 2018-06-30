@@ -1,8 +1,10 @@
 /** Platform specific implementations. */
-import { Middleware, ReducersMapObject } from 'redux'
+import { Middleware } from 'redux'
+import * as Api from 'typescript-fetch-api'
 
 import { Config } from 'auth/types'
 import { PlatformSupport } from '../index'
+import { store } from 'root'
 
 const platformSupportImplementation: PlatformSupport = {
 	/** Customise the Redux middleware for this platform */
@@ -10,7 +12,11 @@ const platformSupportImplementation: PlatformSupport = {
 		return middlewares
 	},
 
-	customiseReducers: (reducers: ReducersMapObject): ReducersMapObject => {
+	customiseRootReducer: (reducer) => {
+		return reducer
+	},
+
+	customiseReducers: (reducers) => {
 		return reducers
 	},
 
@@ -19,8 +25,27 @@ const platformSupportImplementation: PlatformSupport = {
 		return Promise.resolve(result)
 	},
 
+	createApiConfigurationParams: (): Api.ConfigurationParameters => {
+		return {
+			basePath: 'http://tomcat.dev.cactuslab.com/myhomecare/api/v0',
+			accessToken: (name: string, scopes?: string[]): string => {
+				let accessToken = store.getState().auth.accessToken
+				if (accessToken) {
+					return accessToken.access_token
+				} else {
+					// TODO the generated API doesn't support not returning a valid access token
+					// We send a string, rather than nothing, so the server responds with a 401 rather
+					// than a 403. A 401 signals that we need to authenticate, so the rest of our code
+					// handles the failure appropriately. See handleDiscard.
+					return 'INVALID'
+				}
+			},
+		}
+	},
+
 	createAuthConfiguration: (): Config => {
 		return {
+			tokenEndpoint: 'http://example.com/oauth/token',
 			clientId: 'test',
 			clientSecret: 'secret',
 		}
