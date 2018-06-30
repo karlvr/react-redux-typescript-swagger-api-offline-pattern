@@ -6,14 +6,13 @@ import { AccessToken } from './types'
 import * as url from 'url'
 import { store } from 'root/index'
 import * as actions from './actions'
-import { configuration as apiConfiguration } from 'api/index'
 import { getAuthConfig } from '.'
 
 /** How many seconds before the access token expires do we refresh it */
 const REFRESH_TOKEN_WINDOW = 60
 
 function fetchAccessToken(options: RequestInit): Promise<AccessToken> {
-	return fetch(apiConfiguration.basePath + '/token', options)
+	return fetch(getAuthConfig().tokenEndpoint, options)
 		.then(response => {
 			if (response.ok) {
 				return response.json()

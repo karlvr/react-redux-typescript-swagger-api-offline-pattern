@@ -4,14 +4,16 @@ import { Action, AsyncActionCreators } from 'typescript-fsa'
 
 import { refreshTokenNow } from 'auth/sagas'
 import * as selectors from './selectors'
+import { getErrorTransformer } from '.'
 
 /** A generic function for calling API while calling typescript-fsa async action's done and failed
  * actions.
  */
-export function* callApi<A, B, C>(
+export function* callApi<A, B>(
 	action: Action<A>, 
-	async: AsyncActionCreators<A, B, C>, 
-	func: (payload: A, options: RequestInit) => Promise<B>, retry: boolean = true
+	async: AsyncActionCreators<A, B, Error>, 
+	func: (payload: A, options: RequestInit) => Promise<B>, 
+	retry: boolean = true
 ): SagaIterator {
 	/* Check if there are any offline changes queued, and don't allow GET requests through, as we
 	   might load information that would replace our pending changes in the state, such as resetting
@@ -21,28 +23,43 @@ export function* callApi<A, B, C>(
 	if (queueLength > 0) {
 		let error = new Error('Offline changes are queued')
 
-		yield put(async.failed({ params: action.payload, error: (error as {}) as C }))
+		yield put(async.failed({ params: action.payload, error}))
 		return
 	}
 
+	let result: B
 	try {
-		let result = yield call(() => {
-			return func(action.payload, {})
-		})
-
-		yield put(async.done({ params: action.payload, result }))
-	} catch (error) {
-		if (error.status === 401) {
-			if (retry) {
-				const refreshResult = yield call(refreshTokenNow)				
-				if (refreshResult) {
-					yield call(callApi, action, async, func, false)
-					return
+		result = yield call(func, action.payload, {})
+	} catch (response) {
+		if (response instanceof Response) {
+			if (response.status === 401) {
+				if (retry) {
+					const refreshResult = yield call(refreshTokenNow)				
+					if (refreshResult) {
+						yield call(callApi, action, async, func, false)
+						return
+					}
 				}
 			}
+
+			const errorTransformer = getErrorTransformer()
+			if (errorTransformer) {
+				const error = errorTransformer(response)
+				yield put(async.failed({ params: action.payload, error }))
+			} else {
+				const error = new Error(response.statusText)
+				error.name = 'APIError'
+				yield put(async.failed({ params: action.payload, error }))
+			}
+		} else if (response instanceof Error) {
+			yield put(async.failed({ params: action.payload, error: response }))
+		} else {
+			yield put(async.failed({ params: action.payload, error: new Error('Unknown API response') }))
 		}
-		yield put(async.failed({ params: action.payload, error }))
+		return
 	}
+
+	yield put(async.done({ params: action.payload, result }))
 }
 
 export function timestamp() {

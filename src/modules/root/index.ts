@@ -1,3 +1,4 @@
+import { initApiConfiguration } from '../api'
 import { createStore, compose, applyMiddleware, StoreEnhancer, Middleware } from 'redux'
 import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction'
 import createSagaMiddleware from 'redux-saga'
@@ -79,6 +80,9 @@ function getStore() {
 
 /* Run the root saga */
 sagaMiddleware.run(rootSaga)
+
+/* Init the API */
+initApiConfiguration(platform.createApiConfigurationParams())
 
 /* Create the authentication config */
 setAuthConfig(platform.createAuthConfiguration())
