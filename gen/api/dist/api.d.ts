@@ -188,13 +188,13 @@ export interface Pet {
     name: string;
     /**
      *
-     * @type {Array<string>}
+     * @type {Array&lt;string&gt;}
      * @memberof Pet
      */
     photoUrls: Array<string>;
     /**
      *
-     * @type {Array<Tag>}
+     * @type {Array&lt;Tag&gt;}
      * @memberof Pet
      */
     tags?: Array<Tag>;
@@ -311,23 +311,23 @@ export declare const PetApiFetchParamCreator: (configuration?: Configuration) =>
      *
      * @summary Deletes a pet
      * @param {number} petId Pet id to delete
-     * @param {string} [api_key]
+     * @param {string} [apiKey]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deletePet(petId: number, api_key?: string, options?: any): FetchArgs;
+    deletePet(petId: number, apiKey?: string, options?: any): FetchArgs;
     /**
      * Multiple status values can be provided with comma separated strings
      * @summary Finds Pets by status
-     * @param {Array<'available' | 'pending' | 'sold'>} status Status values that need to be considered for filter
+     * @param {Array&lt;string&gt;} status Status values that need to be considered for filter
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    findPetsByStatus(status: ("pending" | "available" | "sold")[], options?: any): FetchArgs;
+    findPetsByStatus(status: string[], options?: any): FetchArgs;
     /**
      * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
      * @summary Finds Pets by tags
-     * @param {Array<string>} tags Tags to filter by
+     * @param {Array&lt;string&gt;} tags Tags to filter by
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -386,23 +386,23 @@ export declare const PetApiFp: (configuration?: Configuration) => {
      *
      * @summary Deletes a pet
      * @param {number} petId Pet id to delete
-     * @param {string} [api_key]
+     * @param {string} [apiKey]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deletePet(petId: number, api_key?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response>;
+    deletePet(petId: number, apiKey?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response>;
     /**
      * Multiple status values can be provided with comma separated strings
      * @summary Finds Pets by status
-     * @param {Array<'available' | 'pending' | 'sold'>} status Status values that need to be considered for filter
+     * @param {Array&lt;string&gt;} status Status values that need to be considered for filter
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    findPetsByStatus(status: ("pending" | "available" | "sold")[], options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Pet[]>;
+    findPetsByStatus(status: string[], options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Pet[]>;
     /**
      * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
      * @summary Finds Pets by tags
-     * @param {Array<string>} tags Tags to filter by
+     * @param {Array&lt;string&gt;} tags Tags to filter by
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -461,23 +461,23 @@ export declare const PetApiFactory: (configuration?: Configuration, fetch?: Fetc
      *
      * @summary Deletes a pet
      * @param {number} petId Pet id to delete
-     * @param {string} [api_key]
+     * @param {string} [apiKey]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deletePet(petId: number, api_key?: string, options?: any): Promise<Response>;
+    deletePet(petId: number, apiKey?: string, options?: any): Promise<Response>;
     /**
      * Multiple status values can be provided with comma separated strings
      * @summary Finds Pets by status
-     * @param {Array<'available' | 'pending' | 'sold'>} status Status values that need to be considered for filter
+     * @param {Array&lt;string&gt;} status Status values that need to be considered for filter
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    findPetsByStatus(status: ("pending" | "available" | "sold")[], options?: any): Promise<Pet[]>;
+    findPetsByStatus(status: string[], options?: any): Promise<Pet[]>;
     /**
      * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
      * @summary Finds Pets by tags
-     * @param {Array<string>} tags Tags to filter by
+     * @param {Array&lt;string&gt;} tags Tags to filter by
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -529,7 +529,7 @@ export declare class PetApi extends BaseAPI {
     /**
      *
      * @summary Add a new pet to the store
-     * @param {Pet} body Pet object that needs to be added to the store
+     * @param {} body Pet object that needs to be added to the store
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -538,26 +538,26 @@ export declare class PetApi extends BaseAPI {
     /**
      *
      * @summary Deletes a pet
-     * @param {number} petId Pet id to delete
-     * @param {string} [api_key]
+     * @param {} petId Pet id to delete
+     * @param {} [apiKey]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
      */
-    deletePet(petId: number, api_key?: string, options?: any): Promise<Response>;
+    deletePet(petId: number, apiKey?: string, options?: any): Promise<Response>;
     /**
      * Multiple status values can be provided with comma separated strings
      * @summary Finds Pets by status
-     * @param {Array<'available' | 'pending' | 'sold'>} status Status values that need to be considered for filter
+     * @param {} status Status values that need to be considered for filter
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
      */
-    findPetsByStatus(status: Array<'available' | 'pending' | 'sold'>, options?: any): Promise<Pet[]>;
+    findPetsByStatus(status: Array<string>, options?: any): Promise<Pet[]>;
     /**
      * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
      * @summary Finds Pets by tags
-     * @param {Array<string>} tags Tags to filter by
+     * @param {} tags Tags to filter by
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -566,7 +566,7 @@ export declare class PetApi extends BaseAPI {
     /**
      * Returns a single pet
      * @summary Find pet by ID
-     * @param {number} petId ID of pet to return
+     * @param {} petId ID of pet to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -575,7 +575,7 @@ export declare class PetApi extends BaseAPI {
     /**
      *
      * @summary Update an existing pet
-     * @param {Pet} body Pet object that needs to be added to the store
+     * @param {} body Pet object that needs to be added to the store
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -584,9 +584,9 @@ export declare class PetApi extends BaseAPI {
     /**
      *
      * @summary Updates a pet in the store with form data
-     * @param {number} petId ID of pet that needs to be updated
-     * @param {string} [name] Updated name of the pet
-     * @param {string} [status] Updated status of the pet
+     * @param {} petId ID of pet that needs to be updated
+     * @param {} [name] Updated name of the pet
+     * @param {} [status] Updated status of the pet
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -595,9 +595,9 @@ export declare class PetApi extends BaseAPI {
     /**
      *
      * @summary uploads an image
-     * @param {number} petId ID of pet to update
-     * @param {string} [additionalMetadata] Additional data to pass to server
-     * @param {any} [file] file to upload
+     * @param {} petId ID of pet to update
+     * @param {} [additionalMetadata] Additional data to pass to server
+     * @param {} [file] file to upload
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PetApi
@@ -729,7 +729,7 @@ export declare class StoreApi extends BaseAPI {
     /**
      * For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
      * @summary Delete purchase order by ID
-     * @param {number} orderId ID of the order that needs to be deleted
+     * @param {} orderId ID of the order that needs to be deleted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StoreApi
@@ -748,7 +748,7 @@ export declare class StoreApi extends BaseAPI {
     /**
      * For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
      * @summary Find purchase order by ID
-     * @param {number} orderId ID of pet that needs to be fetched
+     * @param {} orderId ID of pet that needs to be fetched
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StoreApi
@@ -757,7 +757,7 @@ export declare class StoreApi extends BaseAPI {
     /**
      *
      * @summary Place an order for a pet
-     * @param {Order} body order placed for purchasing the pet
+     * @param {} body order placed for purchasing the pet
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StoreApi
@@ -780,7 +780,7 @@ export declare const UserApiFetchParamCreator: (configuration?: Configuration) =
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {Array<User>} body List of user object
+     * @param {Array&lt;User&gt;} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -788,7 +788,7 @@ export declare const UserApiFetchParamCreator: (configuration?: Configuration) =
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {Array<User>} body List of user object
+     * @param {Array&lt;User&gt;} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -851,7 +851,7 @@ export declare const UserApiFp: (configuration?: Configuration) => {
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {Array<User>} body List of user object
+     * @param {Array&lt;User&gt;} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -859,7 +859,7 @@ export declare const UserApiFp: (configuration?: Configuration) => {
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {Array<User>} body List of user object
+     * @param {Array&lt;User&gt;} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -922,7 +922,7 @@ export declare const UserApiFactory: (configuration?: Configuration, fetch?: Fet
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {Array<User>} body List of user object
+     * @param {Array&lt;User&gt;} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -930,7 +930,7 @@ export declare const UserApiFactory: (configuration?: Configuration, fetch?: Fet
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {Array<User>} body List of user object
+     * @param {Array&lt;User&gt;} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -987,7 +987,7 @@ export declare class UserApi extends BaseAPI {
     /**
      * This can only be done by the logged in user.
      * @summary Create user
-     * @param {User} body Created user object
+     * @param {} body Created user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -996,7 +996,7 @@ export declare class UserApi extends BaseAPI {
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {Array<User>} body List of user object
+     * @param {} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1005,7 +1005,7 @@ export declare class UserApi extends BaseAPI {
     /**
      *
      * @summary Creates list of users with given input array
-     * @param {Array<User>} body List of user object
+     * @param {} body List of user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1014,7 +1014,7 @@ export declare class UserApi extends BaseAPI {
     /**
      * This can only be done by the logged in user.
      * @summary Delete user
-     * @param {string} username The name that needs to be deleted
+     * @param {} username The name that needs to be deleted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1023,7 +1023,7 @@ export declare class UserApi extends BaseAPI {
     /**
      *
      * @summary Get user by user name
-     * @param {string} username The name that needs to be fetched. Use user1 for testing.
+     * @param {} username The name that needs to be fetched. Use user1 for testing.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1032,8 +1032,8 @@ export declare class UserApi extends BaseAPI {
     /**
      *
      * @summary Logs user into the system
-     * @param {string} username The user name for login
-     * @param {string} password The password for login in clear text
+     * @param {} username The user name for login
+     * @param {} password The password for login in clear text
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -1050,8 +1050,8 @@ export declare class UserApi extends BaseAPI {
     /**
      * This can only be done by the logged in user.
      * @summary Updated user
-     * @param {string} username name that need to be updated
-     * @param {User} body Updated user object
+     * @param {} username name that need to be updated
+     * @param {} body Updated user object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
