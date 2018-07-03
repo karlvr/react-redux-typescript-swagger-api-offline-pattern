@@ -29,7 +29,7 @@ export default function register() {
 		if (publicUrl.origin !== window.location.origin) {
 			// Our service worker won't work if PUBLIC_URL is on a different origin
 			// from what our page is served on. This might happen if a CDN is used to
-			// serve assets see https://github.com/facebookincubator/create-react-app/issues/2374
+			// serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
 			return
 		}
 
@@ -60,8 +60,8 @@ function registerValidSW(swUrl: string) {
 								// At this point, the old content will have been purged and
 								// the fresh content will have been added to the cache.
 								// It's the perfect time to display a 'New content is
-								// available please refresh.' message in your web app.
-								console.log('New content is available please refresh.')
+								// available; please refresh.' message in your web app.
+								console.log('New content is available; please refresh.')
 							} else {
 								// At this point, everything has been precached.
 								// It's the perfect time to display a
