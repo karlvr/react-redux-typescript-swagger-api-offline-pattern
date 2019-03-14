@@ -8,7 +8,6 @@ import { take, call, put, race, select } from 'redux-saga/effects'
 import * as actions from './actions'
 import { authenticate, refresh } from './functions'
 import { SagaIterator } from 'redux-saga'
-import { RootStoreState } from 'root/index'
 import { readyAction } from '../root/actions'
 import { AccessToken, LoginRequest } from './types'
 
@@ -97,14 +96,14 @@ function* handleLogoutRequest(): SagaIterator {
 
 /** Yields a boolean result, whether there is a user logged in or not. */
 export function* loggedIn(): SagaIterator {
-	let accessToken = yield select<RootStoreState>(accessTokenSelector)
+	let accessToken = yield select(accessTokenSelector)
 	return accessToken !== undefined
 }
 
 var refreshingToken = false
 
 export function* refreshTokenNow(): SagaIterator {
-	let accessToken = (yield select<RootStoreState>(accessTokenSelector)) as AccessToken
+	let accessToken = (yield select(accessTokenSelector)) as AccessToken
 	if (!accessToken) {
 		throw new Error('Not logged in')
 	}
