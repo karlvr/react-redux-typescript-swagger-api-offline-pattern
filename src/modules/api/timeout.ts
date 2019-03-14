@@ -1,6 +1,4 @@
-import portableFetch from 'portable-fetch'
-
-/* This code has been ported from the fetch-timeout module, so we can make it use portable-fetch */
+/* This code has been ported from the fetch-timeout module, as fetch-timeout requires node-fetch */
 /**
  * [timeoutPromise description]
  * @param  {Promise} promise
@@ -28,5 +26,5 @@ export function fetchTimeout(url: string, options?: {}, timeout?: number, error?
 	error = error || 'Timeout error'
 	options = options || {}
 	timeout = timeout || 10000
-	return timeoutPromise(portableFetch(url, options), timeout, error)
+	return timeoutPromise(fetch(url, options), timeout, error)
 }
