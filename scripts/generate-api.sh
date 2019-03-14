@@ -15,14 +15,17 @@ fi
 rm -rf "$destdir"
 
 # Generate the API
-swagger-codegen generate -i "$swagger" -l typescript-fetch -o "$destdir" -c $basedir/../etc/api.json
+openapi-generator generate -i "$swagger" -g typescript-fetch -o "$destdir" -c $basedir/../etc/api.json
 
 # Detect npm or yarn
 npm_or_similar=npm
 
+cat > $destdir/.gitignore <<EOF
+node_modules
+EOF
+
 # Build the API
 pushd "$destdir"
-sed -e 's/prepublishOnly/postinstall/' -i '' package.json
 $npm_or_similar install
 # We need to include the url module explicitly to support running on React Native
 #npm install --save url
