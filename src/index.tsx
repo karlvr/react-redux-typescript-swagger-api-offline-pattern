@@ -3,9 +3,13 @@ import * as ReactDOM from 'react-dom'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 import './index.css'
+import { init } from 'root'
 
-ReactDOM.render(
-	<App />,
-	document.getElementById('root') as HTMLElement
-)
+init().then(() => {
+	ReactDOM.render(
+		<App />,
+		document.getElementById('root') as HTMLElement
+	)
+})
+
 registerServiceWorker()
