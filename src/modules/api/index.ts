@@ -9,18 +9,19 @@ let configuration: Api.Configuration | undefined
 let api: Api.PetApi | undefined
 let errorTransformer: ApiErrorTransformer | undefined
 
-/** Our fetch API wrapper to provide additional functionality */
-const myFetchAPI: Api.FetchAPI = function(url: string, init?: {}): Promise<Response> {
-	/* Apply a timeout to our requests. Note that the timeout doesn't cancel the request, it merely
-	   throws an error so we are not left hanging.
-	 */
-	return fetchTimeout(url, init, 30000)
-}
-
 export function initApiConfiguration(params: Api.ConfigurationParameters) {
-	configuration = new Api.Configuration(params)
+	/** Optionally apply our fetch API wrapper to provide additional functionality */
+	if (!params.fetchApi) {
+		params.fetchApi = function(url: string, init?: {}): Promise<Response> {
+			/* Apply a timeout to our requests. Note that the timeout doesn't cancel the request, it merely
+			   throws an error so we are not left hanging.
+			 */
+			return fetchTimeout(url, init, 30000)
+		}
+	}
 
-	api = new Api.PetApi(configuration, undefined, myFetchAPI)
+	configuration = new Api.Configuration(params)
+	api = new Api.PetApi(configuration)
 }
 
 export function getConfiguration(): Api.Configuration {

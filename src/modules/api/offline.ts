@@ -10,7 +10,7 @@ import { refreshTokenAndApply } from 'auth/functions'
 
 type GenericActionCreatorFunction = ((result: {}) => ({}))
 
-type ApiActionHandler<P> = (payload: P, options: RequestInit) => Promise<object | undefined>
+type ApiActionHandler<P> = (payload: P, options: RequestInit) => Promise<object | undefined | void>
 
 /** Wrap promise results into the result format expected by typescript-fsa async actions so
  * the payload on the done and failed actions matches the type signatures provided by

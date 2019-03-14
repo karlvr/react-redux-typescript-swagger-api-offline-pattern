@@ -11,7 +11,7 @@ const pets = new Api.PetApi()
 function* handleRequestPets(action: petstore.RequestPetsAction): SagaIterator {
 	try {
 		let result: Api.Pet[] = yield call(() => {
-			return pets.findPetsByStatus(['available'])
+			return pets.findPetsByStatus({ status: [Api.FindPetsByStatusStatusEnum.Available] })
 		})
 
 		yield put(petstore.requestPets.done({ params: action.payload, result }))

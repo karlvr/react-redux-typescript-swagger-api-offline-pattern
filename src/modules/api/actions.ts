@@ -7,8 +7,8 @@ import { wrapOfflineAction } from './offline'
 const actionCreator = actionCreatorFactory('API')
 
 /** Offline-capable action to add a new pet. */
-export const addPet = wrapOfflineAction(actionCreator.async<Api.Pet, Response, Response>('ADD_PET'), (payload) => {
-	return api().addPet(payload)
+export const addPet = wrapOfflineAction(actionCreator.async<Api.Pet, Response, Response>('ADD_PET'), (body) => {
+	return api().addPet({ body })
 })
 
 /** Action fired when the app goes online. */
