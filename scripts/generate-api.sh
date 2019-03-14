@@ -19,12 +19,6 @@ swagger-codegen generate -i "$swagger" -l typescript-fetch -o "$destdir" -c $bas
 
 # Detect npm or yarn
 npm_or_similar=npm
-set +e
-hash yarn 2>&1
-if [ $? == 0 ]; then
-  npm_or_similar=yarn
-fi
-set -e
 
 # Build the API
 pushd "$destdir"
