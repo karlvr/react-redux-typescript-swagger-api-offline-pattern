@@ -4,16 +4,16 @@
   "private": true,
   "dependencies": {
     "@redux-offline/redux-offline": "^2.2.1",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
-    "react-redux": "^5.0.6",
-    "react-scripts-ts": "2.16.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-redux": "^6.0.1",
+    "react-scripts-ts": "3.1.0",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
-    "redux-saga": "^0.16.0",
+    "redux-saga": "^1.0.2",
     "typescript-fetch-api": "file:gen/api",
     "typescript-fsa": "^2.5.0",
-    "typescript-fsa-reducers": "^0.4.5"
+    "typescript-fsa-reducers": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -23,11 +23,11 @@
     "api": "scripts/generate-api.sh http://petstore.swagger.io/v2/swagger.json"
   },
   "devDependencies": {
-    "@types/jest": "^23.1.1",
-    "@types/node": "^10.3.4",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.11.3",
     "@types/react": "^16.3.0",
     "@types/react-dom": "^16.0.5",
-    "@types/react-redux": "^6.0.2",
-    "typescript": "^2.9.2"
+    "@types/react-redux": "^7.0.3",
+    "typescript": "^3.3"
   }
 }
