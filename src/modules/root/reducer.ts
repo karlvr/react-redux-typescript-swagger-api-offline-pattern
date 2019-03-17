@@ -12,27 +12,29 @@ import * as petstore from 'petstore/reducer'
 
 /**
  * The root store state. Include sub-states for all of the modules / ducks.
- * All of these should be annotated `readonly`, as should everything down
- * the tree of StoreState interfaces, and their contents.
  */
-export interface StoreState {
-	readonly template: template.StoreState
-	readonly auth: auth.StoreState
-	readonly petstore: petstore.StoreState
+export type StoreState = DeepReadonly<MutableStoreState>
 
-	readonly ready: boolean
+interface MutableStoreState {
+	template: template.StoreState
+	auth: auth.StoreState
+	petstore: petstore.StoreState
+
+	ready: boolean
 }
 
 const readyReducer = reducerWithInitialState(false)
 	.case(a.readyAction, (state, payload) => (true))
 
+const reducers = platform.customiseReducers({
+		template: template.reducer,
+		auth: auth.reducer,
+		petstore: petstore.reducer,
+
+		ready: readyReducer,
+	})
+
 /**
  * The root reducer, combines reducers for all of the modules / ducks.
  */
-export const reducer = platform.customiseRootReducer(combineReducers<StoreState>(platform.customiseReducers({
-	template: template.reducer,
-	auth: auth.reducer,
-	petstore: petstore.reducer,
-
-	ready: readyReducer,
-})))
+export const reducer = platform.customiseRootReducer(combineReducers(reducers))
