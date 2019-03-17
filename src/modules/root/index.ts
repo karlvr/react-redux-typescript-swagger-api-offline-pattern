@@ -39,6 +39,11 @@ export async function init(): Promise<void> {
 			store.dispatch(readyAction())
 		},
 
+		persistOptions: {
+			/* Don't persist the ready key, as we want to always set it when we dispatch the readyAction */
+			blacklist: ['ready'],
+		},
+
 		/**
 		 * This function is used to handle actions tagged for redux-offline to handle.
 		 */
