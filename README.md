@@ -53,16 +53,45 @@ npm start
 
 ## Setup
 
-Start with the setup of the base [React + Redux + Typescript + OAuth2 + Swagger Codegen API Client](https://github.com/karlvr/react-redux-typescript-swagger-api-pattern) and then
-continue...
+This project was setup using [create-react-app](https://github.com/facebookincubator/create-react-app). You can setup your own project using the commands below.
 
-Install more dependencies:
+Install `create-react-app`:
 
 ```
+npm install -g create-react-app
+```
+
+Create the project using `create-react-app`:
+
+```
+create-react-app <project> --scripts-version=react-scripts-ts
+cd <project>
+```
+
+Install dependencies:
+
+```
+npm install --save redux react-redux
+npm install --save -D @types/react-redux
+npm install --save typescript-fsa-reducers typescript-fsa
 npm install --save @redux-offline/redux-offline
+npm install --save immer
 ```
 
-Note that as of this time redux-offline doesn't contain TypeScript types, but there is a [PR for TypeScript type definitions for redux-offline](https://github.com/redux-offline/redux-offline/pull/112), so we have simply included the type definitions from that PR in our project at `src/types/redux-offline.d.ts`.
+Include the devtools:
+
+```
+npm install redux-devtools-extension
+```
+
+Copy the template files by copying the `modules` folder from this
+repository into your new project:
+
+```
+cp -r ../react-redux-typescript-pattern/src/modules src/
+```
+
+Then look at the `src/App.tsx` in this pattern to see how to include the example container into your project.
 
 ### API
 
