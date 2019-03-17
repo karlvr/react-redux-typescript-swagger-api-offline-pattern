@@ -2,7 +2,7 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import produce from 'immer'
 
 /* Import our module's actions */
-import * as actions from './actions'
+import * as a from './actions'
 
 /**
  * Export the immutable StoreState interface for this module. We always name this interface
@@ -32,11 +32,11 @@ const INITIAL_STATE: StoreState = produce(
 export const reducer = reducerWithInitialState(INITIAL_STATE)
 
 /** Reducer function for the exampleAction that returns a new state using an implicit return. */
-reducer.case(actions.exampleAction, (state, payload) => produce(state, draft => {
+reducer.case(a.examplePayloadAction, (state, payload) => produce(state, draft => {
 	draft.name = payload.value
 }))
 
 /** Reducer function for examplePrimitiveAction that returns a new state using an explicit return. */
-reducer.case(actions.examplePrimitiveAction, (state, name) => produce(state, draft => {
+reducer.case(a.examplePrimitivePayloadAction, (state, name) => produce(state, draft => {
 	draft.name = name
 }))

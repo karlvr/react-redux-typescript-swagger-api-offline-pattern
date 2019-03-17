@@ -24,7 +24,7 @@ interface MutableStoreState {
 }
 
 const readyReducer = reducerWithInitialState(false)
-	.case(a.readyAction, (state, payload) => (true))
+	.case(a.readyAction, () => true)
 
 const reducers = platform.customiseReducers({
 		template: template.reducer,

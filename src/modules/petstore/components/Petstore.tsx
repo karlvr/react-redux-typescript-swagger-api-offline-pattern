@@ -21,13 +21,9 @@ const INITIAL_STATE: State = {
 	
 }
 
-export default class Example extends React.Component<Props & Actions, State> {
+export default class Petstore extends React.Component<Props & Actions, State> {
 
 	state = INITIAL_STATE
-
-	addPet = () => {
-		this.props.onAddPet('test')
-	}
 
 	render() {
 		const { pets } = this.props
@@ -64,5 +60,9 @@ export default class Example extends React.Component<Props & Actions, State> {
 				)}
 			</div>
 		)
+	}
+
+	private addPet = () => {
+		this.props.onAddPet('test')
 	}
 }

@@ -12,17 +12,24 @@ import { Dispatch, Action } from 'redux'
 import { RootStoreState } from 'root/index'
 
 /* Import module actions */
-import * as actions from '../actions'
+import * as a from '../actions'
 
 /**
- * Interface for properties that the container passes to the component.
+ * Interface for properties that this container passes to its component.
  */
 export interface Props {
 	exampleProperty: string
 }
 
 /**
- * Interface for action callbacks that the container exposes to the component.
+ * Interface for properties that the parent component will pass to this container.
+ */
+export interface OwnProps {
+	myOwnProp?: string
+}
+
+/**
+ * Interface for action callbacks that this container exposes to its component.
  * The component's `this.props` is typed `Props & Actions`.
  */
 export interface Actions {
@@ -30,16 +37,16 @@ export interface Actions {
 }
 
 /** Populate the Props from the store state. */
-const mapStateToProps = (state: RootStoreState): Props => {
+const mapStateToProps = (state: RootStoreState, ownProps: OwnProps): Props => {
 	return {
 		exampleProperty: state.template.name,
 	}
 }
 
 /** Populate the Actions with the callbacks for the component. */
-const mapDispatchToProps = (dispatch: Dispatch<Action>): Actions => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action>, ownProps: OwnProps): Actions => ({
 	onExample: (value) => {
-		dispatch(actions.examplePrimitiveAction(value))
+		dispatch(a.examplePrimitivePayloadAction(value))
 	},
 })
 

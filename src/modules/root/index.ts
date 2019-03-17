@@ -17,7 +17,7 @@ export type RootStoreState = RootStoreState
 /* API handling */
 import { handleDiscard, handleEffect } from 'api/offline'
 
-export let store: Store
+export let store: Store<RootStoreState>
 
 export async function init(): Promise<void> {
 	/**

@@ -5,14 +5,18 @@ import actionCreatorFactory, { Action } from 'typescript-fsa'
  */
 const actionCreator = actionCreatorFactory('Template')
 
+/** An example action with no payload. */
+export const exampleNoPayloadAction = actionCreator('EXAMPLE_NO_PAYLOAD')
+
 /* An example action with an interface as its payload. */
 export interface ExampleActionPayload {
 	value: string
+	otherValue?: string
 }
-export const exampleAction = actionCreator<ExampleActionPayload>('EXAMPLE')
+export const examplePayloadAction = actionCreator<ExampleActionPayload>('EXAMPLE')
 
 /* An example action with a primitive payload. */
-export const examplePrimitiveAction = actionCreator<string>('EXAMPLE_PRIMITIVE')
+export const examplePrimitivePayloadAction = actionCreator<string>('EXAMPLE_PRIMITIVE')
 
 /* An example action with more types that can be used to use typing with this
 action elsewhere in the code.

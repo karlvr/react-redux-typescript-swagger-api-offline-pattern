@@ -12,7 +12,7 @@ import { Action, Dispatch } from 'redux'
 import { RootStoreState } from 'root/index'
 
 /* Import module files */
-import * as actions from '../actions'
+import * as a from '../actions'
 import { Pet } from '../types'
 
 /**
@@ -33,20 +33,20 @@ export interface Actions {
 }
 
 /** Populate the Props from the store state. */
-const mapStateToProps = ({ petstore }: RootStoreState): Props => {
+const mapStateToProps = (state: RootStoreState): Props => {
 	return {
-		pets: petstore.pets,
-		error: petstore.error,
+		pets: state.petstore.pets,
+		error: state.petstore.error,
 	}
 }
 
 /** Populate the Actions with the callbacks for the component. */
 const mapDispatchToProps = (dispatch: Dispatch<Action>): Actions => ({
 	loadPets: () => {
-		dispatch(actions.requestPets.started(undefined))
+		dispatch(a.requestPets.started(undefined))
 	},
 	onAddPet: (name) => {
-		dispatch(actions.addPet({
+		dispatch(a.addPet({
 			name,
 			photoUrls: [''],
 		}))
