@@ -2,9 +2,9 @@
 import { Middleware } from 'redux'
 import * as Api from 'typescript-fetch-api'
 
-import { Config } from 'auth/types'
+import { Config } from '@modules/auth/types'
 import { PlatformSupport } from '../index'
-import { store } from 'root'
+import { store } from '@modules/root'
 
 const platformSupportImplementation: PlatformSupport = {
 	/** Customise the Redux middleware for this platform */

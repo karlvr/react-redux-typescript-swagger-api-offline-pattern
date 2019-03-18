@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
 
-import { store } from 'root/index'
+import { store } from '@modules/root/index'
 
 import './App.css'
-import Example from 'template/containers/Example'
-import Login from 'auth/containers/Login'
-import Petstore from 'petstore/containers/Petstore'
-import ReadyGate from 'offline/containers/ReadyGate'
+import Example from '@modules/template/containers/Example'
+import Login from '@modules/auth/containers/Login'
+import Petstore from '@modules/petstore/containers/Petstore'
+import ReadyGate from '@modules/offline/containers/ReadyGate'
 
 const logo = require('./logo.svg')
 

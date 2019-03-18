@@ -4,7 +4,7 @@
 
 import { AccessToken } from './types'
 import * as url from 'url'
-import { store } from 'root/index'
+import { store } from '@modules/root/index'
 import * as actions from './actions'
 import { getAuthConfig } from '.'
 

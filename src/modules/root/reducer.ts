@@ -1,13 +1,13 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { combineReducers } from 'redux'
 
-import platform from 'platform/index'
+import platform from '@modules/platform/index'
 import * as a from './actions'
 
 /* Import reducers from our modules */
-import * as template from 'template/reducer'
-import * as auth from 'auth/reducer'
-import * as petstore from 'petstore/reducer'
+import * as template from '@modules/template/reducer'
+import * as auth from '@modules/auth/reducer'
+import * as petstore from '@modules/petstore/reducer'
 // import * as another from '../another/reducers'
 
 /**

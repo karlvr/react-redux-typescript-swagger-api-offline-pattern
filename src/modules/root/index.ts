@@ -6,8 +6,8 @@ import { offline } from '@redux-offline/redux-offline'
 import defaultOfflineConfig from '@redux-offline/redux-offline/lib/defaults'
 
 import rootSaga from './sagas'
-import { setAuthConfig } from 'auth/index'
-import platform from 'platform/index'
+import { setAuthConfig } from '@modules/auth/index'
+import platform from '@modules/platform/index'
 
 import { readyAction } from './actions'
 import { StoreState as RootStoreState, reducer } from './reducer'
@@ -15,7 +15,7 @@ import { StoreState as RootStoreState, reducer } from './reducer'
 export type RootStoreState = RootStoreState
 
 /* API handling */
-import { handleDiscard, handleEffect } from 'api/offline'
+import { handleDiscard, handleEffect } from '@modules/api/offline'
 
 export let store: Store<RootStoreState>
 
