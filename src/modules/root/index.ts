@@ -19,6 +19,8 @@ import { handleDiscard, handleEffect } from '@modules/api/offline'
 
 export let store: Store<RootStoreState>
 
+const PERSIST_KEY_PREFIX = 'react-redux-typescript-pattern'
+
 export async function init(): Promise<void> {
 	/**
 	 * Create the redux-saga middleware.
@@ -42,6 +44,7 @@ export async function init(): Promise<void> {
 		persistOptions: {
 			/* Don't persist the ready key, as we want to always set it when we dispatch the readyAction */
 			blacklist: ['ready'],
+			keyPrefix: PERSIST_KEY_PREFIX,
 		},
 
 		/**
