@@ -21,12 +21,10 @@ interface MutableStoreState {
 	refreshFailedAt?: number
 }
 
-const INITIAL_STATE: StoreState = produce(
-	{
-		accessToken: undefined,
-		loggingIn: false,
-	},
-	draft => draft)
+const INITIAL_STATE: StoreState = {
+	accessToken: undefined,
+	loggingIn: false,
+}
 
 export const reducer = reducerWithInitialState(INITIAL_STATE)
 
