@@ -9,6 +9,8 @@ import { refreshTokenAndApply } from 'modules/auth/functions'
 
 export type ApiActionHandler<P, R> = (payload: P, options: RequestInit) => Promise<R>
 
+const API_HANDLER_NOT_FOUND_ERROR = 'APIHandlerNotFoundError'
+
 const handlersByActionType: {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[type: string]: ApiActionHandler<any, any>
@@ -21,7 +23,9 @@ const handlersByActionType: {
 function handleOfflineAction(action: OfflineAction, retry: boolean = true): Promise<object | undefined> {
 	const handler = handlersByActionType[action.type]
 	if (!handler) {
-		return Promise.reject({ params: action.payload, error: new Error('No offline API handler found for action: ' + action.type) })
+		const error = new Error(`No offline API handler found for action: ${action.type}`)
+		error.name = API_HANDLER_NOT_FOUND_ERROR
+		return Promise.reject({ params: action.payload, error })
 	}
 
 	const promise = handler(action.payload, {})
@@ -46,22 +50,28 @@ function handleOfflineAction(action: OfflineAction, retry: boolean = true): Prom
 	})
 }
 
-export function handleDiscard(error: Failure<{}, Response>, action: OfflineAction, retries: number = 0) {
+export function handleDiscard(failure: Failure<object, Response | Error>, action: OfflineAction, retries: number = 0) {
 	/* The Swagger Codegen API throws the response in the event of an error, so we use the
 	status code from the response to determine whether to discard. And we use wrapPromise to wrap the results
 	of the API into the Success or Failure containers that typescript-fsa uses, so we deconstruct those here.
 	*/
-	if (error.error instanceof Response) {
-		if (error.error.status === 401) {
+	if (failure.error instanceof Response) {
+		if (failure.error.status === 401) {
 			/* Don't discard in the face of auth errors, we will try again once we're authed. */
 			return false
 		}
 		// if (error.error.status === 500) { return true }
-		return error.error.status >= 400 && error.error.status < 500
-	} else {
-		/* We don't want to discard anything that is not an instance of Response, because the request didn't make it to the server. */
-		return false
+		return failure.error.status >= 400 && failure.error.status < 500
+	} else if (failure.error instanceof Error) {
+		if (failure.error.name && failure.error.name === API_HANDLER_NOT_FOUND_ERROR) {
+			/* We haven't been able to handle this API request so we must drop it. This is a programming error. */
+			console.error(failure.error)
+			return true
+		}
 	}
+
+	/* We don't want to discard anything that is not an instance of Response, because the request didn't make it to the server. */
+	return false
 }
 
 export function handleEffect(effect: {}, action: OfflineAction): Promise<object | undefined> {
