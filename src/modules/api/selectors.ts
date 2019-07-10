@@ -1,5 +1,5 @@
 import { AppState } from '@redux-offline/redux-offline/lib/types'
-import { RootStoreState } from '@modules/root/index'
+import { RootStoreState } from 'modules/root/index'
 
 export function offlineOutboxQueueLength(state: RootStoreState): number {
 	const appState = (state as {}) as AppState

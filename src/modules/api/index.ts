@@ -22,12 +22,18 @@ export function initApiConfiguration(params: Api.ConfigurationParameters) {
 }
 
 export function getConfiguration(): Api.Configuration {
-	return configuration!
+	if (!configuration) {
+		throw new Error('initApiConfiguration has not been called')
+	}
+	return configuration
 }
 
 /** A global API client. This API client should be used by the rest of the app to connect to the
  * API. It uses the global configuration, so it can pick up the required access token.
  */
 export default function getApi(): Api.PetApi {
-	return api!
+	if (!api) {
+		throw new Error('initApiConfiguration has not been called')
+	}
+	return api
 }

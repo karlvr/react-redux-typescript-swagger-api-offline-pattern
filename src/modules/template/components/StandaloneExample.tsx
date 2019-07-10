@@ -26,9 +26,9 @@ const INITIAL_STATE: State = {
 
 export default class StandaloneExample extends React.Component<ComponentOwnProps, State> {
 
-	state = INITIAL_STATE
+	public state = INITIAL_STATE
 
-	render() {
+	public render() {
 		// const { exampleProperty } = this.props
 
 		return (
@@ -39,10 +39,6 @@ export default class StandaloneExample extends React.Component<ComponentOwnProps
 		)
 	}
 
-	/**
-	 * An ES6 function definition. We define the function like this, rather than as per
-	 * the render() function below so that it binds `this` automatically.
-	 */
 	// private doExample = () => {
 	// 	this.props.onExample(this.state.myValue)
 	// }

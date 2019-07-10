@@ -1,13 +1,13 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { combineReducers } from 'redux'
 
-import platform from '@modules/platform/index'
+import platform from 'modules/platform/index'
 import * as a from './actions'
 
 /* Import reducers from our modules */
-import * as template from '@modules/template/reducer'
-import * as auth from '@modules/auth/reducer'
-import * as petstore from '@modules/petstore/reducer'
+import * as template from 'modules/template/reducer'
+import * as auth from 'modules/auth/reducer'
+import * as petstore from 'modules/petstore/reducer'
 // import * as another from '../another/reducers'
 
 /**
@@ -27,12 +27,12 @@ const readyReducer = reducerWithInitialState(false)
 	.case(a.readyAction, () => true)
 
 const reducers = platform.customiseReducers({
-		template: template.reducer,
-		auth: auth.reducer,
-		petstore: petstore.reducer,
+	template: template.reducer,
+	auth: auth.reducer,
+	petstore: petstore.reducer,
 
-		ready: readyReducer,
-	})
+	ready: readyReducer,
+})
 
 /**
  * The root reducer, combines reducers for all of the modules / ducks.

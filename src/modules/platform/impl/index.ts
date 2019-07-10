@@ -2,9 +2,9 @@
 import { Middleware } from 'redux'
 import * as Api from 'typescript-fetch-api'
 
-import { Config } from '@modules/auth/types'
+import { Config } from 'modules/auth/types'
 import { PlatformSupport } from '../index'
-import { store } from '@modules/root'
+import { getStore } from 'modules/root'
 
 const platformSupportImplementation: PlatformSupport = {
 	/** Customise the Redux middleware for this platform */
@@ -29,7 +29,7 @@ const platformSupportImplementation: PlatformSupport = {
 		return {
 			basePath: 'http://example.com/api/v0',
 			accessToken: (name: string, scopes?: string[]): string => {
-				let accessToken = store.getState().auth.accessToken
+				let accessToken = getStore().getState().auth.accessToken
 				if (accessToken) {
 					return accessToken.access_token
 				} else {

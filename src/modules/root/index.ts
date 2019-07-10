@@ -6,18 +6,22 @@ import { offline } from '@redux-offline/redux-offline'
 import defaultOfflineConfig from '@redux-offline/redux-offline/lib/defaults'
 
 import rootSaga from './sagas'
-import { setAuthConfig } from '@modules/auth/index'
-import platform from '@modules/platform/index'
+import { setAuthConfig } from 'modules/auth/index'
+import platform from 'modules/platform/index'
 
 import { readyAction } from './actions'
 import { StoreState as RootStoreState, reducer } from './reducer'
 
+/* API handling */
+import { handleDiscard, handleEffect } from 'modules/api/offline'
+
 export type RootStoreState = RootStoreState
 
-/* API handling */
-import { handleDiscard, handleEffect } from '@modules/api/offline'
+let store: Store<RootStoreState>
 
-export let store: Store<RootStoreState>
+export function getStore() {
+	return store
+}
 
 const PERSIST_KEY_PREFIX = 'react-redux-typescript-pattern'
 

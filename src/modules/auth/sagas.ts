@@ -12,8 +12,8 @@ import { readyAction } from '../root/actions'
 import { AccessToken, LoginRequest } from './types'
 
 import { accessTokenSelector } from './selectors'
-import { offlineOutboxQueueLength } from '@modules/api/selectors'
-import platform from '@modules/platform/index'
+import { offlineOutboxQueueLength } from 'modules/api/selectors'
+import platform from 'modules/platform/index'
 
 /** Saga handling the state of being logged out. */
 function* loggedOutSaga(): SagaIterator {

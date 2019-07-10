@@ -23,9 +23,9 @@ const INITIAL_STATE: State = {
 
 export default class ReadyGate extends React.Component<Props & Actions, State> {
 
-	state = INITIAL_STATE
+	public state = INITIAL_STATE
 
-	render() {
+	public render() {
 		const { ready, waitComponent: WaitComponent, ...rest } = this.props
 
 		if (ready) {

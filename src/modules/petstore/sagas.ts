@@ -2,7 +2,7 @@ import { takeEvery, call, put } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
 import * as Api from 'typescript-fetch-api'
 
-import * as petstore from '@modules/petstore/actions'
+import * as petstore from 'modules/petstore/actions'
 import * as actions from './actions'
 
 const pets = new Api.PetApi()
@@ -23,7 +23,7 @@ function* handleRequestPets(action: petstore.RequestPetsAction): SagaIterator {
 /** Handle an API update request that we're going to support offline. */
 function* handleAddPet(action: petstore.AddPetAction): SagaIterator {
 	/* Dispatch our offline API action to persist the request represented by the received action. */
-	yield put(actions.addPet.started(action.payload))
+	yield put(actions.addPetAsync.started(action.payload))
 }
 
 export default function* saga(): SagaIterator {

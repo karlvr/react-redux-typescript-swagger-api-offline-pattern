@@ -28,14 +28,14 @@ const INITIAL_STATE: State = {
 	myDeepValue: {
 		aString: 'abc',
 		aNumber: 33,
-	}
+	},
 }
 
 export default class Example extends React.Component<OwnProps & Props & Actions, State> {
 
-	state = INITIAL_STATE
+	public state = INITIAL_STATE
 
-	render() {
+	public render() {
 		const { exampleProperty } = this.props
 
 		return (
@@ -46,10 +46,6 @@ export default class Example extends React.Component<OwnProps & Props & Actions,
 		)
 	}
 
-	/**
-	 * An ES6 function definition. We define the function like this, rather than as per
-	 * the render() function below so that it binds `this` automatically.
-	 */
 	private doExample = () => {
 		this.props.onExample(this.state.myValue)
 
@@ -58,7 +54,7 @@ export default class Example extends React.Component<OwnProps & Props & Actions,
 			myDeepValue: {
 				...this.state.myDeepValue,
 				aNumber: 35,
-			}
+			},
 		})
 	}
 }

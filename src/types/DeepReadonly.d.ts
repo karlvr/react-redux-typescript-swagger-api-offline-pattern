@@ -9,12 +9,13 @@
  * interfaces / objects and arrays. Note that mutating functions will still be exposed
  * so you have to be careful not to use them, especially on arrays.
  */
+
 type DeepReadonly<T> =
 	T extends (infer R)[] ? DeepReadonlyArray<R> :
-	T extends DeepReadonlyArray<infer R> ? T :
-	T extends Function ? T :
-	T extends object ? DeepReadonlyObject<T> :
-	T
+		T extends DeepReadonlyArray<infer R> ? T :
+			T extends Function ? T :
+				T extends object ? DeepReadonlyObject<T> :
+					T
 
 interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
 

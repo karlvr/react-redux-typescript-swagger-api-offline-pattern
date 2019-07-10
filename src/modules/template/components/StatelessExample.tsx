@@ -9,7 +9,7 @@ import { OwnProps, Props, Actions } from '../containers/Example'
 
 export default class StatelessExample extends React.Component<OwnProps & Props & Actions> {
 
-	render() {
+	public render() {
 		// const { exampleProperty } = this.props
 
 		return (
@@ -20,10 +20,6 @@ export default class StatelessExample extends React.Component<OwnProps & Props &
 		)
 	}
 
-	/**
-	 * An ES6 function definition. We define the function like this, rather than as per
-	 * the render() function below so that it binds `this` automatically.
-	 */
 	// private doExample = () => {
 	// 	this.props.onExample(this.state.myValue)
 	// }

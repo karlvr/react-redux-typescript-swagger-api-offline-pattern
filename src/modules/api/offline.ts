@@ -5,24 +5,26 @@
 import { OfflineAction } from '@redux-offline/redux-offline/lib/types'
 import { Failure, ActionCreator, AsyncActionCreators, Meta, Action } from 'typescript-fsa'
 
-import * as actions from './actions'
-import { refreshTokenAndApply } from '@modules/auth/functions'
+import { refreshTokenAndApply } from 'modules/auth/functions'
 
-type GenericActionCreatorFunction = ((result: {}) => ({}))
+export type ApiActionHandler<P, R> = (payload: P, options: RequestInit) => Promise<R>
 
-type ApiActionHandler<P> = (payload: P, options: RequestInit) => Promise<object | undefined | void>
+const handlersByActionType: {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	[type: string]: ApiActionHandler<any, any>
+} = {}
 
 /** Wrap promise results into the result format expected by typescript-fsa async actions so
  * the payload on the done and failed actions matches the type signatures provided by
  * typescript-fsa.
  */
-function apiPromise(action: OfflineAction, retry: boolean = true): Promise<object | undefined> {
-	const handler = handlerForAction(action)
+function handleOfflineAction(action: OfflineAction, retry: boolean = true): Promise<object | undefined> {
+	const handler = handlersByActionType[action.type]
 	if (!handler) {
 		return Promise.reject({ params: action.payload, error: new Error('No offline API handler found for action: ' + action.type) })
 	}
 
-	let promise = handler(action.payload!, {})
+	const promise = handler(action.payload, {})
 	return promise.then(result => {
 		return Promise.resolve({ params: action.payload, result })
 	}).catch(error => {
@@ -30,7 +32,7 @@ function apiPromise(action: OfflineAction, retry: boolean = true): Promise<objec
 			if (error.status === 401) {
 				if (retry) {
 					return refreshTokenAndApply().then(() => {
-						return apiPromise(action, false)
+						return handleOfflineAction(action, false)
 					}).catch(refreshError => {
 						/* Must fail with the original error so that handleDiscard can handle this correctly. */
 						return Promise.reject({ params: action.payload, error })
@@ -56,72 +58,47 @@ export function handleDiscard(error: Failure<{}, Response>, action: OfflineActio
 		}
 		// if (error.error.status === 500) { return true }
 		return error.error.status >= 400 && error.error.status < 500
-	} else if ((error.error as {}) instanceof Error) {
-		const otherError = error.error as Error
-		if (otherError.message === 'Failed to fetch') {
-			/* Occurs when blacklisting in Charles */
-			return false
-		}
 	} else {
-		if (error.error === 'Timeout error') {
-			/* Allow requests that fail due to timeout to retry. The string 'Timeout error' is the default string from the fetch-timeout module. */
-			return false
-		}
+		/* We don't want to discard anything that is not an instance of Response, because the request didn't make it to the server. */
+		return false
 	}
-
-	/* Other errors that aren't thrown responses are always discarded. */
-	return true
 }
 
 export function handleEffect(effect: {}, action: OfflineAction): Promise<object | undefined> {
-	return apiPromise(action)
+	return handleOfflineAction(action)
 }
 
-interface AsyncActionCreatorsWithHandler<P> {
-	handler: ApiActionHandler<P>
-}
-
-/** Wrap an async action creator so that it creates actions with the metadata for redux-offline. So
- * when you create and dispatch the started action from the resulting action creator, it will be picked
- * up and handled by redux-offline.
+/** 
+ * Wrap an async action creator so that it creates actions with the metadata for redux-offline. So
+ * when you create and dispatch the wrapped `started` action, it will be picked up and handled by redux-offline.
  */
-export function wrapOfflineAction<P, B, C>(action: AsyncActionCreators<P, B, C>, handler: ApiActionHandler<P>): AsyncActionCreators<P, B, C> {
-	let newActionStartedCreator = function (payload: P, meta?: Meta): Action<P> {
-		let result = action.started(payload, meta)
+export function wrapOfflineAction<P, R, B, C>(action: AsyncActionCreators<P, B, C>, handler: ApiActionHandler<P, R>): AsyncActionCreators<P, B, C> {
+	/* Remember the handler so we can find it later when handleEffect needs it. */
+	handlersByActionType[action.started.type] = handler
+
+	const newActionStartedCreator = function (payload: P, meta?: Meta): Action<P> {
+		const result = action.started(payload, meta)
 		result.meta = {
 			...result.meta,
 			offline: {
-				commit: (action.done as GenericActionCreatorFunction)({ params: payload, result: undefined }),
-				rollback: (action.failed as GenericActionCreatorFunction)({ params: payload, result: {} }),
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				commit: action.done({ params: payload, result: undefined as any as B }),
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				rollback: action.failed({ params: payload, error: {} as any as C }),
 			},
 		}
 		return result
 	}
 
-	let newAction = newActionStartedCreator as ActionCreator<P>
-	newAction.type = action.started.type
-	newAction.match = action.started.match
+	const newActionStarted = newActionStartedCreator as ActionCreator<P>
+	newActionStarted.type = action.started.type
+	newActionStarted.match = action.started.match
 
-	let actionCreator: AsyncActionCreators<P, B, C> = {
+	const newActionCreator: AsyncActionCreators<P, B, C> = {
 		type: action.type,
-		started: newAction,
+		started: newActionStarted,
 		done: action.done,
 		failed: action.failed,
-	};
-
-	((actionCreator as {}) as AsyncActionCreatorsWithHandler<P>).handler = handler
-	return actionCreator
-}
-
-/** Find the handler function for the given action. */
-function handlerForAction(action: OfflineAction): ApiActionHandler<{}> | undefined {
-	/* Find the handler function by iterating through all the exported actions, looking for the one with the right type.
-	   The handler function is inserted into the action creator by wrapOfflineAction.
-	*/
-	for (let o in actions) {
-		if (typeof actions[o] === 'object' && typeof actions[o].started === 'function' && actions[o].started.type === action.type) {
-			return actions[o].handler
-		}
 	}
-	return undefined
+	return newActionCreator
 }

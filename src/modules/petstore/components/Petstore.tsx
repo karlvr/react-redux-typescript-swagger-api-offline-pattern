@@ -23,9 +23,9 @@ const INITIAL_STATE: State = {
 
 export default class Petstore extends React.Component<Props & Actions, State> {
 
-	state = INITIAL_STATE
+	public state = INITIAL_STATE
 
-	render() {
+	public render() {
 		const { pets } = this.props
 
 		return (
@@ -50,11 +50,11 @@ export default class Petstore extends React.Component<Props & Actions, State> {
 						<tbody>
 							{pets.filter((pet, index) => index < 20)
 								.map((pet, index) => 
-								<tr key={index}>
-									<td>{pet.name}</td>
-									<td>{pet.status}</td>
-								</tr>
-							)}
+									<tr key={index}>
+										<td>{pet.name}</td>
+										<td>{pet.status}</td>
+									</tr>
+								)}
 						</tbody>
 					</table>
 				)}

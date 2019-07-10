@@ -36,14 +36,14 @@ reducer.case(actions.requestPets.started, (state) => produce(state, draft => {
 }))
 
 reducer.case(actions.requestPets.done, (state, { result: pets }) => produce(state, draft => {
-	draft.pets = pets
+	draft.pets = pets.slice(0, Math.min(pets.length, 50))
 }))
 
 reducer.case(actions.requestPets.failed, (state, { error }) => produce(state, draft => {
 	draft.error = error
 }))
 
-reducer.case(actions.addPet, (state, payload) => produce(state, draft => {
+reducer.case(actions.addPet, (state, payload) => produce(state as MutableStoreState, draft => {
 	draft.pets.unshift(payload)
 	draft.error = undefined
 }))

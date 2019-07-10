@@ -6,7 +6,10 @@ import { Config } from './types'
 let config: Config | undefined
 
 export function getAuthConfig(): Config {
-	return config!
+	if (!config) {
+		throw new Error('setAuthConfig has not been called')
+	}
+	return config
 }
 
 export function setAuthConfig(newConfig: Config) {

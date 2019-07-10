@@ -2,7 +2,7 @@ import { put, call, select } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
 import { AsyncActionCreators } from 'typescript-fsa'
 
-import { refreshTokenNow } from '@modules/auth/sagas'
+import { refreshTokenNow } from 'modules/auth/sagas'
 import * as selectors from './selectors'
 
 /** Calls an API and returns the result, or throws an Error.

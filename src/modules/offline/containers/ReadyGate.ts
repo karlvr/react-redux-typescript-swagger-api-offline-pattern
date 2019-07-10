@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { Dispatch, Action } from 'redux'
 
 /* Import RootStoreState */
-import { RootStoreState } from '@modules/root/index'
+import { RootStoreState } from 'modules/root/index'
 
 /**
  * Interface for properties that the container passes to the component.

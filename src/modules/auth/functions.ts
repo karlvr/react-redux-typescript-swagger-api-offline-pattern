@@ -4,7 +4,7 @@
 
 import { AccessToken } from './types'
 import * as url from 'url'
-import { store } from '@modules/root/index'
+import { getStore } from 'modules/root'
 import * as actions from './actions'
 import { getAuthConfig } from '.'
 
@@ -34,10 +34,11 @@ function fetchAccessToken(options: RequestInit): Promise<AccessToken> {
 		.then(json => json as AccessToken)
 		.then(accessToken => {
 			/* Add the refreshAt date to the token, so we know when to refresh it */
-			return {
+			const result: AccessToken = {
 				...accessToken,
 				refreshAt: Date.now() + (accessToken.expires_in - REFRESH_TOKEN_WINDOW) * 1000,
-			} as AccessToken
+			}
+			return result
 		})
 }
 
@@ -45,8 +46,11 @@ function fetchAccessToken(options: RequestInit): Promise<AccessToken> {
 export function authenticate(username: string, password: string): Promise<AccessToken> {
 	const config = getAuthConfig()
 	let query = {
+		// eslint-disable-next-line @typescript-eslint/camelcase
 		client_id: config.clientId,
+		// eslint-disable-next-line @typescript-eslint/camelcase
 		client_secret: config.clientSecret,
+		// eslint-disable-next-line @typescript-eslint/camelcase
 		grant_type: 'password',
 		username,
 		password,
@@ -57,8 +61,8 @@ export function authenticate(username: string, password: string): Promise<Access
 		method: 'POST',
 		body: formData,
 		headers: {
-			'content-type': 'application/x-www-form-urlencoded'
-		}
+			'content-type': 'application/x-www-form-urlencoded',
+		},
 	}
 	return fetchAccessToken(options)
 }
@@ -69,9 +73,13 @@ export function authenticate(username: string, password: string): Promise<Access
 export function refresh(refreshToken: string): Promise<AccessToken> {
 	const config = getAuthConfig()
 	let query = {
+		// eslint-disable-next-line @typescript-eslint/camelcase
 		client_id: config.clientId,
+		// eslint-disable-next-line @typescript-eslint/camelcase
 		client_secret: config.clientSecret,
+		// eslint-disable-next-line @typescript-eslint/camelcase
 		grant_type: 'refresh_token',
+		// eslint-disable-next-line @typescript-eslint/camelcase
 		refresh_token: refreshToken,
 	}
 	let formData = url.format({ query }).substring(1)
@@ -80,8 +88,8 @@ export function refresh(refreshToken: string): Promise<AccessToken> {
 		method: 'POST',
 		body: formData,
 		headers: {
-			'content-type': 'application/x-www-form-urlencoded'
-		}
+			'content-type': 'application/x-www-form-urlencoded',
+		},
 	}
 	return fetchAccessToken(options)
 }
@@ -93,13 +101,13 @@ export function refresh(refreshToken: string): Promise<AccessToken> {
  */
 export function refreshTokenAndApply(): Promise<AccessToken> {
 	return new Promise((resolve, reject) => {
-		let accessToken = store.getState().auth.accessToken
+		let accessToken = getStore().getState().auth.accessToken
 		if (accessToken) {
 			refresh(accessToken.refresh_token).then(refreshedAccessToken => {
-				store.dispatch(actions.refreshedToken(refreshedAccessToken))
+				getStore().dispatch(actions.refreshedToken(refreshedAccessToken))
 				resolve(refreshedAccessToken)
 			}).catch(error => {
-				store.dispatch(actions.refreshTokenFailed(Date.now()))
+				getStore().dispatch(actions.refreshTokenFailed(Date.now()))
 				reject(error)
 			})
 		} else {
