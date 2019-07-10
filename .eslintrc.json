@@ -13,6 +13,7 @@
 		"@typescript-eslint/no-non-null-assertion": "warn",
 		"@typescript-eslint/no-use-before-define": ["error", "nofunc"],
 		"@typescript-eslint/no-var-requires": "off",
-		"semi": ["warn", "never"]
+		"semi": ["warn", "never"],
+		"quotes": ["warn", "single"]
 	}
 }
