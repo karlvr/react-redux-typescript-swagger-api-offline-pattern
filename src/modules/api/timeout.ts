@@ -6,7 +6,7 @@
  * @param  {string} error
  * @return
  */
-function timeoutPromise<P>(promise: Promise<P>, timeout: number, error: {}): Promise<P> {
+function timeoutPromise<P>(promise: Promise<P>, timeout: number, error: Error): Promise<P> {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => { reject(error) }, timeout)
 		promise.then(resolve, reject)
@@ -22,8 +22,8 @@ function timeoutPromise<P>(promise: Promise<P>, timeout: number, error: {}): Pro
  * @param  {string} error   custom error string after the timeout is expired
  * @return {Promise}
  */
-export function fetchTimeout(url: string, options?: {}, timeout?: number, error?: {}): Promise<Response> {
-	error = error || 'Timeout error'
+export function fetchTimeout(url: string, options?: {}, timeout?: number, error?: Error): Promise<Response> {
+	error = error || new Error('Timeout error')
 	options = options || {}
 	timeout = timeout || 10000
 	return timeoutPromise(fetch(url, options), timeout, error)
