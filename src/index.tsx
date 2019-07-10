@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-import { init } from 'modules/root'
+import { init } from 'modules/root/init'
 
 init().then(() => {
 	ReactDOM.render(<App />, document.getElementById('root'))
