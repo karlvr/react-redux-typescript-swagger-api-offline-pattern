@@ -1,13 +1,14 @@
-import { initApiConfiguration } from '../api'
+import { initApiConfiguration } from 'modules/api'
 import { createStore, compose, applyMiddleware, StoreEnhancer, Middleware, Store } from 'redux'
 import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction'
 import createSagaMiddleware from 'redux-saga'
 import { offline } from '@redux-offline/redux-offline'
+import { Config } from '@redux-offline/redux-offline/lib/types'
 import defaultOfflineConfig from '@redux-offline/redux-offline/lib/defaults'
 
 import rootSaga from './sagas'
-import { setAuthConfig } from 'modules/auth/index'
-import platform from 'modules/platform/index'
+import { setAuthConfig } from 'modules/auth'
+import platform from 'modules/platform'
 
 import { readyAction } from './actions'
 import { StoreState as RootStoreState, reducer } from './reducer'
@@ -34,7 +35,7 @@ export async function init(): Promise<void> {
 	/**
 	 * Create the redux-offline configuration, based on the default configuration.
 	 */
-	const offlineConfig = {
+	const offlineConfig: Config = {
 		...defaultOfflineConfig,
 
 		/**
@@ -42,7 +43,7 @@ export async function init(): Promise<void> {
 		 */
 		persistCallback: () => {
 			/* Let our app know that the application state has been rehydrated and is ready to be used. */
-			store.dispatch(readyAction())
+			getStore().dispatch(readyAction())
 		},
 
 		persistOptions: {
@@ -89,12 +90,12 @@ export async function init(): Promise<void> {
 	 */
 	store = createStore(reducer, enhancers)
 
-	/* Run the root saga */
-	sagaMiddleware.run(rootSaga)
-
 	/* Init the API */
 	initApiConfiguration(platform.createApiConfigurationParams())
 
 	/* Create the authentication config */
 	setAuthConfig(platform.createAuthConfiguration())
+
+	/* Run the root saga */
+	sagaMiddleware.run(rootSaga)
 }
