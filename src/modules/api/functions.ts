@@ -63,17 +63,17 @@ export function* callApi<REQUEST, RESPONSE>(payload: REQUEST, func: (payload: RE
 /** Calls the API and dispatches async actions to notify of starting, result or error.
  * Returns a boolean whether the request succeeded or failed, but does not throw an errors.
  * @param payload The request payload
- * @param async An async action of type <REQUEST, RESPONSE, Error>
+ * @param async An async action of type <P, R, E>
  * @param func A function that is called to perform the API operation, that returns a Promise that yields the response, or throws an Error or Response.
  * @returns true if the API request suceeded or false.
  */
-export function* callApiWithActions<REQUEST, RESPONSE, ERROR>(payload: REQUEST, async: AsyncActionCreators<REQUEST, RESPONSE, ERROR>, func: (options: RequestInit) => Promise<RESPONSE>): SagaIterator {
+export function* callApiWithActions<P, R, E>(payload: P, async: AsyncActionCreators<P, R, E>, func: (options: RequestInit) => Promise<R>): SagaIterator {
 	/* Signal the start of the API interaction */
 	yield put(async.started(payload))
 
-	let result: RESPONSE
+	let result: R
 	try {
-		result = (yield call(callApi, payload, func)) as RESPONSE
+		result = (yield call(callApi, payload, func)) as R
 	} catch (error) {
 		yield put(async.failed({ params: payload, error }))
 		return false
