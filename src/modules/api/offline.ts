@@ -7,7 +7,7 @@ import { Failure, ActionCreator, AsyncActionCreators, Meta, Action, Success } fr
 
 import { refreshTokenAndApply } from 'modules/auth/functions'
 
-export type ApiActionHandler<P, R> = (payload: P, options: RequestInit) => Promise<R>
+export type OfflineActionHandler<P, R> = (payload: P) => Promise<R>
 
 /** If your offline action handler throws an Error, it will be converted to this type in the failed action payload. */
 export interface OfflineActionGenericError {
@@ -22,11 +22,11 @@ export interface OfflineActionGenericResponseError {
 }
 
 /** The error name to use for errors that cannot be recovered and indicate that a request should not be retried */
-const OFFLINE_API_HANDLER_ERROR = 'OfflineAPIHandlerError'
+const OFFLINE_HANDLER_ERROR = 'OfflineHandlerError'
 
 const handlersByActionType: {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	[type: string]: ApiActionHandler<any, any>
+	[type: string]: OfflineActionHandler<any, any>
 } = {}
 
 /** Wrap promise results into the result format expected by typescript-fsa async actions so
@@ -36,13 +36,13 @@ const handlersByActionType: {
 async function handleOfflineAction(action: OfflineAction, retry: boolean = true): Promise<unknown> {
 	const handler = handlersByActionType[action.type]
 	if (!handler) {
-		const error = new Error(`No offline API handler found for action: ${action.type}`)
-		error.name = OFFLINE_API_HANDLER_ERROR
+		const error = new Error(`No offline handler found for action: ${action.type}`)
+		error.name = OFFLINE_HANDLER_ERROR
 		throw error
 	}
 
 	try {
-		return await handler(action.payload, {})
+		return await handler(action.payload)
 	} catch (error) {
 		if (error instanceof Response) {
 			if (error.status === 401) {
@@ -138,8 +138,8 @@ export function handleDiscard(failure: Failure<unknown, unknown> & { actualError
 		// if (error.error.status === 500) { return true }
 		return failure.actualError.status >= 400 && failure.actualError.status < 500
 	} else if (failure.actualError instanceof Error) {
-		if (failure.actualError.name && failure.actualError.name === OFFLINE_API_HANDLER_ERROR) {
-			/* We haven't been able to handle this API request so we must drop it. This is a programming error. */
+		if (failure.actualError.name && failure.actualError.name === OFFLINE_HANDLER_ERROR) {
+			/* We haven't been able to handle this action so we must drop it. This represents a programming error. */
 			console.error(failure.actualError)
 			return true
 		}
@@ -153,7 +153,7 @@ export function handleDiscard(failure: Failure<unknown, unknown> & { actualError
  * Wrap an async action creator so that it creates actions with the metadata for redux-offline. So
  * when you create and dispatch the wrapped `started` action, it will be picked up and handled by redux-offline.
  */
-export function wrapOfflineAction<P, R, E>(asyncActionCreators: AsyncActionCreators<P, R, E>, handler: ApiActionHandler<P, R>): AsyncActionCreators<P, R, E> {
+export function wrapOfflineAction<P, R, E>(asyncActionCreators: AsyncActionCreators<P, R, E>, handler: OfflineActionHandler<P, R>): AsyncActionCreators<P, R, E> {
 	const started = asyncActionCreators.started
 
 	/* Remember the handler so we can find it later when handleEffect needs it. */
