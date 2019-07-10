@@ -101,7 +101,7 @@ export function refresh(refreshToken: string): Promise<AccessToken> {
  */
 export function refreshTokenAndApply(): Promise<AccessToken> {
 	return new Promise((resolve, reject) => {
-		let accessToken = getStore().getState().auth.accessToken
+		const accessToken = getStore().getState().auth.accessToken
 		if (accessToken) {
 			refresh(accessToken.refresh_token).then(refreshedAccessToken => {
 				getStore().dispatch(actions.refreshedToken(refreshedAccessToken))

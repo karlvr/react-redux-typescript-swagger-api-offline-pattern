@@ -3,7 +3,7 @@ import * as Api from 'typescript-fetch-api'
 
 import { Config } from 'modules/auth/types'
 import platformSupportImplementation from './impl'
-import { RootStoreState } from 'modules/root/index'
+import { RootStoreState } from 'modules/root'
 
 export interface PlatformSupport {
 	customiseReduxMiddleware: (middlewares: Middleware[]) => Middleware[]

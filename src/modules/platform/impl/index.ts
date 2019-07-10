@@ -29,7 +29,7 @@ const platformSupportImplementation: PlatformSupport = {
 		return {
 			basePath: 'http://example.com/api/v0',
 			accessToken: (name: string, scopes?: string[]): string => {
-				let accessToken = getStore().getState().auth.accessToken
+				const accessToken = getStore().getState().auth.accessToken
 				if (accessToken) {
 					return accessToken.access_token
 				} else {
