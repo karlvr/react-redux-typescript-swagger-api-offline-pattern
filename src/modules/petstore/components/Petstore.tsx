@@ -63,6 +63,6 @@ export default class Petstore extends React.Component<Props & Actions, State> {
 	}
 
 	private addPet = () => {
-		this.props.onAddPet('test')
+		this.props.onAddPet(`test ${Math.random()}`)
 	}
 }

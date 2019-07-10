@@ -27,7 +27,7 @@ const platformSupportImplementation: PlatformSupport = {
 
 	createApiConfigurationParams: (): Api.ConfigurationParameters => {
 		return {
-			basePath: 'http://example.com/api/v0',
+			// basePath: 'http://example.com/api/v0',
 			accessToken: (name: string, scopes?: string[]): string => {
 				const accessToken = getStore().getState().auth.accessToken
 				if (accessToken) {
