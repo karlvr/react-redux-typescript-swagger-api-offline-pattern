@@ -1,4 +1,4 @@
-import { Middleware, ReducersMapObject, Reducer, Action } from 'redux'
+import { Middleware, ReducersMapObject, Reducer, Action, Store } from 'redux'
 import * as Api from 'typescript-fetch-api'
 
 import { Config } from 'modules/auth/types'
@@ -6,6 +6,9 @@ import platformSupportImplementation from './impl'
 import { RootStoreState } from 'modules/root'
 
 export interface PlatformSupport {
+
+	init: (store: Store<RootStoreState>) => void
+
 	customiseReduxMiddleware: (middlewares: Middleware[]) => Middleware[]
 
 	customiseRootReducer: (reducer: Reducer<RootStoreState>) => Reducer<RootStoreState>

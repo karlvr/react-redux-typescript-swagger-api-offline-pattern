@@ -1,5 +1,5 @@
 import { initApiConfiguration } from 'modules/api'
-import { createStore, compose, applyMiddleware, StoreEnhancer, Middleware } from 'redux'
+import { createStore, compose, applyMiddleware, StoreEnhancer, Middleware, Store } from 'redux'
 import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction'
 import createSagaMiddleware from 'redux-saga'
 import { offline } from '@redux-offline/redux-offline'
@@ -15,15 +15,17 @@ import { reducer } from './reducer'
 
 /* API handling */
 import { handleDiscard, handleEffect } from 'modules/api/offline'
-import { getStore, RootStoreState, setStore } from './'
+import { RootStoreState } from './'
 
 const PERSIST_KEY_PREFIX = 'react-redux-typescript-pattern'
 
-export async function init(): Promise<void> {
+export async function init(): Promise<Store<RootStoreState>> {
 	/**
 	 * Create the redux-saga middleware.
 	 */
 	const sagaMiddleware = createSagaMiddleware()
+
+	let store: Store<RootStoreState>
 
 	/**
 	 * Create the redux-offline configuration, based on the default configuration.
@@ -36,7 +38,7 @@ export async function init(): Promise<void> {
 		 */
 		persistCallback: () => {
 			/* Let our app know that the application state has been rehydrated and is ready to be used. */
-			getStore().dispatch(readyAction())
+			store.dispatch(readyAction())
 		},
 
 		persistOptions: {
@@ -81,7 +83,10 @@ export async function init(): Promise<void> {
 	 * Create the store. We do not include an initial state, as each of the module / duck
 	 * reducers includes its own initial state.
 	 */
-	setStore(createStore(reducer, enhancers))
+	store = createStore(reducer, enhancers)
+
+	/* Init the platform */
+	platform.init(store)
 
 	/* Init the API */
 	initApiConfiguration(platform.createApiConfigurationParams())
@@ -91,4 +96,5 @@ export async function init(): Promise<void> {
 
 	/* Run the root saga */
 	sagaMiddleware.run(rootSaga)
+	return store
 }

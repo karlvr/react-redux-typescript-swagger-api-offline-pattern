@@ -1,12 +1,21 @@
 /** Platform specific implementations. */
-import { Middleware } from 'redux'
+import { Middleware, Store } from 'redux'
 import * as Api from 'typescript-fetch-api'
 
 import { Config } from 'modules/auth/types'
 import { PlatformSupport } from '../index'
-import { getStore } from 'modules/root'
+import { refreshedToken, refreshTokenFailed } from 'modules/auth/actions'
+import { getAuthConfig } from 'modules/auth'
+import { RootStoreState } from 'modules/root'
+
+let _store: Store<RootStoreState>
 
 const platformSupportImplementation: PlatformSupport = {
+
+	init: (store) => {
+		_store = store
+	},
+
 	/** Customise the Redux middleware for this platform */
 	customiseReduxMiddleware: (middlewares: Middleware[]): Middleware[] => {
 		return middlewares
@@ -29,7 +38,7 @@ const platformSupportImplementation: PlatformSupport = {
 		return {
 			// basePath: 'http://example.com/api/v0',
 			accessToken: (name: string, scopes?: string[]): string => {
-				const accessToken = getStore().getState().auth.accessToken
+				const accessToken = getAuthConfig().accessToken()
 				if (accessToken) {
 					return accessToken.access_token
 				} else {
@@ -48,6 +57,9 @@ const platformSupportImplementation: PlatformSupport = {
 			tokenEndpoint: 'http://example.com/oauth/token',
 			clientId: 'test',
 			clientSecret: 'secret',
+			accessToken: () => _store.getState().auth.accessToken,
+			refreshedAccessToken: (accessToken) => _store.dispatch(refreshedToken(accessToken)),
+			refreshAccessTokenFailed: () => _store.dispatch(refreshTokenFailed(Date.now())),
 		}
 	},
 }

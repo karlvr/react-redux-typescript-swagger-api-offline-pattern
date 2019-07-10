@@ -12,6 +12,7 @@ export interface LoginRequest {
 	password: string
 	rememberMe: boolean
 }
+
 export interface AccessToken {
 	readonly access_token: string
 	readonly token_type: string
@@ -29,4 +30,8 @@ export interface Config {
 	readonly tokenEndpoint: string
 	readonly clientId: string
 	readonly clientSecret: string
+
+	readonly accessToken: () => AccessToken | undefined
+	readonly refreshedAccessToken: (accessToken: AccessToken) => void
+	readonly refreshAccessTokenFailed: () => void
 }

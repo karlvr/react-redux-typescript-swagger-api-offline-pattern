@@ -4,48 +4,41 @@
 
 import { AccessToken } from './types'
 import * as url from 'url'
-import { getStore } from 'modules/root'
-import * as actions from './actions'
 import { getAuthConfig } from '.'
 
 /** How many seconds before the access token expires do we refresh it */
 const REFRESH_TOKEN_WINDOW = 60
 
-function fetchAccessToken(options: RequestInit): Promise<AccessToken> {
-	return fetch(getAuthConfig().tokenEndpoint, options)
-		.then(response => {
-			if (response.ok) {
-				return response.json()
+async function fetchAccessToken(options: RequestInit): Promise<AccessToken> {
+	const response = await fetch(getAuthConfig().tokenEndpoint, options)
+	if (response.ok) {
+		const accessToken = await response.json() as AccessToken
+
+		/* Add the refreshAt date to the token, so we know when to refresh it */
+		const result: AccessToken = {
+			...accessToken,
+			refreshAt: Date.now() + (accessToken.expires_in - REFRESH_TOKEN_WINDOW) * 1000,
+		}
+		return result
+	} else {
+		const contentType = response.headers.get('Content-Type')
+		if (contentType && contentType.indexOf('json') !== -1) {
+			const msg = await response.json()
+			if (msg.error) {
+				throw new Error(`Auth request failed: ${msg.error}`)
 			} else {
-				let contentType = response.headers.get('Content-Type')
-				if (contentType && contentType.indexOf('json') !== -1) {
-					return response.json().then(msg => {
-						if (msg.error) {
-							throw new Error('Auth request failed: ' + msg.error)
-						} else {
-							throw new Error('Auth request failed: ' + response.statusText)
-						}
-					})
-				} else {
-					throw new Error('Auth request failed: ' + response.statusText)
-				}
+				throw new Error(`Auth request failed: ${response.statusText}`)
 			}
-		})
-		.then(json => json as AccessToken)
-		.then(accessToken => {
-			/* Add the refreshAt date to the token, so we know when to refresh it */
-			const result: AccessToken = {
-				...accessToken,
-				refreshAt: Date.now() + (accessToken.expires_in - REFRESH_TOKEN_WINDOW) * 1000,
-			}
-			return result
-		})
+		} else {
+			throw new Error(`Auth request failed: ${response.statusText}`)
+		}
+	}
 }
 
 /** Attempt to obtain an AccessToken with the given credentials. */
 export function authenticate(username: string, password: string): Promise<AccessToken> {
 	const config = getAuthConfig()
-	let query = {
+	const query = {
 		// eslint-disable-next-line @typescript-eslint/camelcase
 		client_id: config.clientId,
 		// eslint-disable-next-line @typescript-eslint/camelcase
@@ -55,9 +48,9 @@ export function authenticate(username: string, password: string): Promise<Access
 		username,
 		password,
 	}
-	let formData = url.format({ query }).substring(1)
+	const formData = url.format({ query }).substring(1)
 
-	let options: RequestInit = {
+	const options: RequestInit = {
 		method: 'POST',
 		body: formData,
 		headers: {
@@ -99,19 +92,20 @@ export function refresh(refreshToken: string): Promise<AccessToken> {
  * refresh token from the store, so there's no need to know any context to
  * call it.
  */
-export function refreshTokenAndApply(): Promise<AccessToken> {
-	return new Promise((resolve, reject) => {
-		const accessToken = getStore().getState().auth.accessToken
-		if (accessToken) {
-			refresh(accessToken.refresh_token).then(refreshedAccessToken => {
-				getStore().dispatch(actions.refreshedToken(refreshedAccessToken))
-				resolve(refreshedAccessToken)
-			}).catch(error => {
-				getStore().dispatch(actions.refreshTokenFailed(Date.now()))
-				reject(error)
-			})
-		} else {
-			reject(new Error('Not logged in'))
+export async function refreshTokenAndApply(): Promise<AccessToken> {
+	const accessToken = getAuthConfig().accessToken()
+	if (accessToken) {
+		let refreshedAccessToken: AccessToken
+		try {
+			refreshedAccessToken = await refresh(accessToken.refresh_token)
+		} catch (error) {
+			getAuthConfig().refreshAccessTokenFailed()
+			throw error
 		}
-	})
+
+		getAuthConfig().refreshedAccessToken(refreshedAccessToken)
+		return refreshedAccessToken
+	} else {
+		throw new Error('Not logged in')
+	}
 }

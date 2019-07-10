@@ -2,11 +2,12 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import { Provider } from 'react-redux'
+import { Store } from 'redux'
+
 import ReadyGate from 'modules/offline/containers/ReadyGate'
 import Login from 'modules/auth/containers/Login'
 import Example from 'modules/template/containers/Example'
 import Petstore from 'modules/petstore/containers/Petstore'
-import { getStore } from 'modules/root'
 
 const Waiting: React.FC = () => {
 	return (
@@ -16,15 +17,19 @@ const Waiting: React.FC = () => {
 	)
 }
 
-const App: React.FC = () => {
+interface Props {
+	store: Store
+}
+
+const App: React.FC<Props> = (props) => {
 	return (
-		<Provider store={getStore()}>
+		<Provider store={props.store}>
 			<ReadyGate waitComponent={Waiting}>
 				<div className="App">
 					<header className="App-header">
 						<img src={logo} className="App-logo" alt="logo" />
 						<p>
-              Edit <code>src/App.tsx</code> and save to reload.
+              				Edit <code>src/App.tsx</code> and save to reload.
 						</p>
 						<a
 							className="App-link"
@@ -32,7 +37,7 @@ const App: React.FC = () => {
 							target="_blank"
 							rel="noopener noreferrer"
 						>
-              Learn React
+              				Learn React
 						</a>
 					</header>
 					<Login />
