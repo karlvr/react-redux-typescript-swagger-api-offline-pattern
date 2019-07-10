@@ -66,14 +66,15 @@ export function* callApiWithActions<REQUEST, RESPONSE, ERROR>(payload: REQUEST, 
 	/* Signal the start of the API interaction */
 	yield put(async.started(payload))
 
+	let result: RESPONSE
 	try {
-		const result = (yield call(callApi, payload, func)) as RESPONSE
-		yield put(async.done({ params: payload, result }))
-		return true
+		result = (yield call(callApi, payload, func)) as RESPONSE
 	} catch (error) {
 		yield put(async.failed({ params: payload, error }))
 		return false
 	}
+	yield put(async.done({ params: payload, result }))
+	return true
 }
 
 export type ApiError = Error | ApiErrorWithMessages
