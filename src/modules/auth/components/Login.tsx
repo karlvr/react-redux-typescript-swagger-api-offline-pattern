@@ -6,7 +6,6 @@
 
 import * as React from 'react'
 import { Props, Actions } from '../containers/Login'
-import { ChangeEvent } from 'react'
 
 /**
  * Interface for private internal component state.
@@ -28,35 +27,9 @@ const INITIAL_STATE: State = {
 
 export default class Login extends React.Component<Props & Actions, State> {
 
-	state = INITIAL_STATE
+	public state = INITIAL_STATE
 
-	doLogin = () => {
-		this.props.onLogin(this.state)
-	}
-
-	doLogout = () => {
-		this.props.onLogout()
-	}
-
-	handleUsername = (e: ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			username: e.target.value,
-		})
-	}
-
-	handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			password: e.target.value,
-		})
-	}
-
-	handleRememberMe = (e: ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			rememberMe: e.target.checked,
-		})
-	}
-
-	render() {
+	public render() {
 		const { loggedIn, error } = this.props
 
 		return (
@@ -67,29 +40,55 @@ export default class Login extends React.Component<Props & Actions, State> {
 						<button onClick={this.doLogout}>Logout</button>
 					</div>
 				) : (
-						<div>
-							<p>
-								<input
-									type="text"
-									name="username"
-									placeholder="Username"
-									onChange={this.handleUsername}
-									value={this.state.username}
-								/>
-								<input
-									type="password"
-									name="password"
-									onChange={this.handlePassword}
-									defaultValue={this.state.password}
-								/>
-								<button onClick={this.doLogin}>Login</button>
-							</p>
-						</div>
-					)}
+					<div>
+						<p>
+							<input
+								type="text"
+								name="username"
+								placeholder="Username"
+								onChange={this.handleUsername}
+								value={this.state.username}
+							/>
+							<input
+								type="password"
+								name="password"
+								onChange={this.handlePassword}
+								defaultValue={this.state.password}
+							/>
+							<button onClick={this.doLogin}>Login</button>
+						</p>
+					</div>
+				)}
 				{error && (
 					<div>{error.message}</div>
 				)}
 			</div>
 		)
+	}
+
+	private doLogin = () => {
+		this.props.onLogin(this.state)
+	}
+
+	private doLogout = () => {
+		this.props.onLogout()
+	}
+
+	private handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			username: e.target.value,
+		})
+	}
+
+	private handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			password: e.target.value,
+		})
+	}
+
+	private handleRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			rememberMe: e.target.checked,
+		})
 	}
 }
