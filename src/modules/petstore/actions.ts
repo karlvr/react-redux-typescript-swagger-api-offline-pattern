@@ -1,4 +1,4 @@
-import actionCreatorFactory, { Action } from 'typescript-fsa'
+import actionCreatorFactory from 'typescript-fsa'
 
 import { Pet } from './types'
 import { wrapOfflineAction } from 'modules/api/offline'
@@ -11,15 +11,15 @@ import api from 'modules/api'
 const actionCreator = actionCreatorFactory('Petstore')
 
 export type RequestPetsSuccessPayload = Pet[]
-export type RequestPetsAction = Action<undefined>
 export const requestPets = actionCreator.async<undefined, RequestPetsSuccessPayload, Error>('REQUEST_PETS')
+export type RequestPetsAction = ReturnType<typeof requestPets.started>
 
 export interface AddPetPayload {
 	name: string
 	photoUrls: string[]
 }
-export type AddPetAction = Action<AddPetPayload>
 export const addPet = actionCreator<AddPetPayload>('ADD_PET')
+export type AddPetAction = ReturnType<typeof addPet>
 
 /** Offline-capable action to add a new pet. */
 export const addPetAsync = wrapOfflineAction(actionCreator.async<Api.Pet, Response, Response>('ADD_PET'), (body) => {
