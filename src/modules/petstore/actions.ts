@@ -1,7 +1,7 @@
 import actionCreatorFactory from 'typescript-fsa'
 
 import { Pet } from './types'
-import { wrapOfflineAction } from 'modules/api/offline'
+import { wrapOfflineAction, OfflineActionGenericError } from 'modules/api/offline'
 import * as Api from 'typescript-fetch-api'
 import api from 'modules/api'
 
@@ -22,6 +22,7 @@ export const addPet = actionCreator<AddPetPayload>('ADD_PET')
 export type AddPetAction = ReturnType<typeof addPet>
 
 /** Offline-capable action to add a new pet. */
-export const addPetAsync = wrapOfflineAction(actionCreator.async<Api.Pet, Response, Response>('ADD_PET'), (body) => {
-	return api().addPet({ body })
+export const addPetAsync = wrapOfflineAction(actionCreator.async<Api.Pet, boolean, OfflineActionGenericError>('ADD_PET'), async (body) => {
+	await api().addPet({ body })
+	return true
 })

@@ -22,35 +22,40 @@ export function* callApi<REQUEST, RESPONSE>(payload: REQUEST, func: (payload: RE
 
 	try {
 		return (yield call(func, payload, {})) as RESPONSE
-	} catch (response) {
-		if (response instanceof Response) {
+	} catch (error) {
+		if (error instanceof Response) {
 			/* Check for an authorisation failed and try to refresh our access token */
-			if (response.status === 401) {
+			if (error.status === 401) {
 				if (retry) {
 					const refreshResult = yield call(refreshTokenNow)
 
 					if (refreshResult) {
 						return yield call(callApi, payload, func, false)
 					} else {
-						throw new Error('Refresh token cancelled')
+						throw new Error('Refresh token failed')
 					}
 				}
 			}
 
-			let errorResponse
-			try {
-				/* We try to parse the server response as JSON, which will contain information that our code can use */
-				errorResponse = yield call(() => response.json())
-			} catch {
-				/* We couldn't parse the response as JSON so we report a generic error */
-				throw new Error(`Unexpected response from server (${response.status})`)
-			}
+			if (error.status >= 200 && error.status < 500) {
+				let errorResponse
+				try {
+					/* We try to parse the server response as JSON, which will contain information that our code can use */
+					errorResponse = yield call(() => error.json())
+				} catch {
+					/* We couldn't parse the response as JSON so we report a generic error */
+					throw new Error(`Unexpected response from server (${error.status})`)
+				}
 
-			throw errorResponse
-		} else if (response instanceof Error) {
-			throw response
+				throw errorResponse
+			} else {
+				throw new Error(`Unexpected response from server (${error.status})`)
+			}
+		} else if (error instanceof Error) {
+			throw error
 		} else {
-			throw new Error('Unknown API response')
+			/* Unknown error type, let's just throw it on */
+			throw error
 		}
 	}
 }
