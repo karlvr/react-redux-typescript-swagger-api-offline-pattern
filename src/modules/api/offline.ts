@@ -159,7 +159,7 @@ export function wrapOfflineAction<P, R, E>(asyncActionCreators: AsyncActionCreat
 	/* Remember the handler so we can find it later when handleEffect needs it. */
 	handlersByActionType[started.type] = handler
 
-	const newActionStartedCreator = function (payload: P, meta?: Meta): Action<P> {
+	const newActionStartedCreator = function(payload: P, meta?: Meta): Action<P> {
 		const result = started(payload, meta)
 		result.meta = {
 			...result.meta,

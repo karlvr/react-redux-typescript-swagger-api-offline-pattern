@@ -37,10 +37,10 @@ export default class Petstore extends React.Component<Props & Actions, State> {
 					<button onClick={this.addPet}>Add Pet</button>
 				</p>
 				{this.props.error && (
-					<p style={{color: 'red'}}>{this.props.error.message}</p>
+					<p style={{ color: 'red' }}>{this.props.error.message}</p>
 				)}
 				{!!pets.length && (
-					<table style={{margin: '0 auto', width: '60%'}}>
+					<table style={{ margin: '0 auto', width: '60%' }}>
 						<thead>
 							<tr>
 								<th>Pet</th>

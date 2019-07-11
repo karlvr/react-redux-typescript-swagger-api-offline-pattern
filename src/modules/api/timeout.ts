@@ -8,7 +8,9 @@
  */
 function timeoutPromise<P>(promise: Promise<P>, timeout: number, error: Error): Promise<P> {
 	return new Promise((resolve, reject) => {
-		setTimeout(() => { reject(error) }, timeout)
+		setTimeout(() => {
+			reject(error) 
+		}, timeout)
 		promise.then(resolve, reject)
 	})
 }

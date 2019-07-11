@@ -22,7 +22,7 @@ export const addPet = actionCreator<AddPetPayload>('ADD_PET')
 export type AddPetAction = ReturnType<typeof addPet>
 
 /** Offline-capable action to add a new pet. */
-export const addPetAsync = wrapOfflineAction(actionCreator.async<Api.Pet, boolean, OfflineActionGenericError>('ADD_PET'), async (body) => {
+export const addPetAsync = wrapOfflineAction(actionCreator.async<Api.Pet, boolean, OfflineActionGenericError>('ADD_PET'), async(body) => {
 	await api().addPet({ body })
 	return true
 })
